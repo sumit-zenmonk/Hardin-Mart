@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { RegisterUserController } from "./register-user.controller";
-import { RegisterUserService } from "./register-user.service";
+import { RegisterUserService } from "./register-user.handler";
 import { UserRepository } from "src/module/user-module/infrastructure/repository/user.repository";
 import { JwtHelperService } from "src/module/user-module/infrastructure/services/jwt.service";
 import { BcryptService } from "src/module/common/infrastruture/services/bcrypt.service";

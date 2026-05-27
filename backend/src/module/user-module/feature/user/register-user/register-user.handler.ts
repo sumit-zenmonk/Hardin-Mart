@@ -18,7 +18,7 @@ export class RegisterUserService {
         private readonly outboxRepository: OutboxRepository,
     ) { }
 
-    async registerUser(req: Request, body: RegisterUserDto) {
+    async handle(req: Request, body: RegisterUserDto) {
         //check if already exists using this email
         const isUserExists = await this.userRepository.findByEmail(body.email);
         if (isUserExists.length) {
@@ -48,14 +48,6 @@ export class RegisterUserService {
             message_payload: RegisteredUser,
         });
 
-        return {
-            message: "Registered User",
-            access_token: token,
-            user: {
-                name: RegisteredUser.name,
-                email: RegisteredUser.email,
-                uuid: RegisteredUser.uuid,
-            }
-        }
+        return;
     }
 }

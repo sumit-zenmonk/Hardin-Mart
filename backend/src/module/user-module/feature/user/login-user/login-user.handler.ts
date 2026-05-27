@@ -13,7 +13,7 @@ export class LoginUserService {
         private readonly jwtHelperService: JwtHelperService,
     ) { }
 
-    async loginUser(req: Request, body: LoginUserDto) {
+    async handle(req: Request, body: LoginUserDto) {
         //check if already exists using this email
         const isUserExists = await this.userRepository.findByEmail(body.email);
         if (!isUserExists.length) {
@@ -26,14 +26,7 @@ export class LoginUserService {
         }
 
         const token = await this.jwtHelperService.generateJwtToken(isUserExists[0]);
-        return {
-            message: "Logged In User",
-            access_token: token,
-            user: {
-                name: isUserExists[0].name,
-                email: isUserExists[0].email,
-                uuid: isUserExists[0].uuid,
-            }
-        }
+
+        return { token, isUserExists };
     }
 }

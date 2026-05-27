@@ -74,22 +74,6 @@ export default function HeaderComp() {
                         </Button>
 
                         <Button
-                            onClick={() => {
-                                router.push("/order")
-                            }}
-                        >
-                            Order
-                        </Button>
-
-                        <Button
-                            onClick={() => {
-                                router.push("/payment-history")
-                            }}
-                        >
-                            Payment History
-                        </Button>
-
-                        <Button
                             className={styles.logoutbtn}
                             onClick={async () => { await handleLogOut() }}
                         >

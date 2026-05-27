@@ -34,7 +34,8 @@ export default function SignupForm() {
     const onSubmit = async (data: SignupSchemaType) => {
         try {
             await dispatch(signupUser(data)).unwrap()
-            router.replace("/")
+            enqueueSnackbar("User Registered Success", { variant: "success" });
+            router.replace("/login")
         } catch (error) {
             enqueueSnackbar(String(error || "Something wrong"), { variant: "error" });
             console.error(error)
