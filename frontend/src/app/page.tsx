@@ -1,65 +1,135 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Container, Typography, } from "@mui/material";
+import styles from "./home.module.css";
+import { RootState } from "@/redux/store";
+import { getProducts } from "@/redux/feature/product/product-action";
+import { enqueueSnackbar } from "notistack";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Product } from "@/redux/feature/product/product-type";
 
 export default function Home() {
+  const dispatch = useAppDispatch();
+  const { products, totalDocuments, loading, } = useAppSelector((state: RootState) => state.productReducer);
+  const { user } = useAppSelector((state: RootState) => state.authReducer);
+  const [offset, setOffset] = useState(Number(process.env.NEXT_PUBLIC_PAGE_OFFSET) || 0);
+  const limit = Number(process.env.NEXT_PUBLIC_PAGE_LIMIT) || 10;
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    if (!products.length) {
+      fetchInitialProducts();
+    }
+  }, []);
+
+  const fetchInitialProducts = async () => {
+    try {
+      setOffset(0);
+
+      await dispatch(getProducts({ limit, offset: 0, })).unwrap();
+    } catch (err: any) {
+      console.log(err);
+      enqueueSnackbar(err, { variant: "warning", });
+    }
+  };
+
+  const fetchMoreProducts = async () => {
+    try {
+      if (loading) return;
+      if (products.length >= totalDocuments) return;
+
+      const newOffset = offset + limit;
+      setOffset(newOffset);
+
+      const response = await dispatch(getProducts({ limit, offset: newOffset, })).unwrap();
+
+      if (!response.data.length) {
+        setHasMore(false);
+        return;
+      }
+
+      if (products.length + response.data.length >= totalDocuments) {
+        setHasMore(false);
+      }
+    } catch (err: any) {
+      console.log(err);
+      enqueueSnackbar(err, { variant: "warning", });
+    }
+  };
+
+  const handleAddToCart = async (product_uuid: string) => {
+    try {
+      if (!user) {
+        enqueueSnackbar("Login Needed", { variant: "error" });
+        return;
+      }
+
+      enqueueSnackbar("Item added to cart", { variant: "success", });
+    } catch (err: any) {
+      console.log(err);
+      enqueueSnackbar(err, { variant: "warning", });
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Container maxWidth="xl" className={styles.container}>
+      <Box className={styles.header}>
+        <Typography variant="h4" className={styles.heading}>
+          Product Listing
+        </Typography>
+
+        <Typography className={styles.subHeading}>
+          Infinite Scroll Products
+        </Typography>
+      </Box>
+
+      <Box id="scrollableDiv" className={styles.scrollWrapper}>
+        <InfiniteScroll
+          dataLength={products.length}
+          next={fetchMoreProducts}
+          hasMore={hasMore}
+          loader={<Box className={styles.loader}><CircularProgress size={30} /></Box>}
+          endMessage={<Typography className={styles.endMessage}>Yay! You have seen it all</Typography>}
+          scrollableTarget="scrollableDiv"
+        >
+          <Box className={styles.productWrapper}>
+            {products.map((product: Product) => (
+              <Card
+                key={product.uuid}
+                className={styles.card}
+                elevation={2}
+              >
+                <Box className={styles.imageWrapper}>
+                  <CardMedia
+                    component="img"
+                    image={product.image_url}
+                    alt={product.name}
+                    className={styles.image}
+                  />
+                </Box>
+
+                <CardContent className={styles.cardContent}
+                >
+                  <Typography className={styles.productName}>{product.name}</Typography>
+                  <Typography className={styles.description}>{product.description}</Typography>
+                  {/* <Typography className={styles.price}>Price: {product.price}</Typography>
+                  <Typography className={styles.stock}>Stock: {product.stock}</Typography> */}
+
+                  <Button
+                    className={styles.addtocart}
+                    startIcon={<ShoppingCartIcon />}
+                    onClick={() => handleAddToCart(product.uuid)}
+                  >Add to Cart
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+        </InfiniteScroll>
+      </Box>
+    </Container>
   );
 }

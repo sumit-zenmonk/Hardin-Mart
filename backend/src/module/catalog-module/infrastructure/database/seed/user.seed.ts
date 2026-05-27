@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { userDataSource, options } from '../data-source';
+import { catalogDataSource, options } from '../data-source';
 import { BcryptService } from '../../../../common/infrastruture/services/bcrypt.service';
 import { UserEntity } from '../../../domain/user/user.entity';
 
@@ -20,16 +20,16 @@ const users = [
 ];
 
 async function create() {
-    userDataSource.setOptions({
+    catalogDataSource.setOptions({
         ...options,
     });
 
-    await userDataSource.initialize();
+    await catalogDataSource.initialize();
 
     const bcryptService = new BcryptService();
     const hashedPassword = await bcryptService.hashPassword("123");
 
-    const queryRunner = userDataSource.createQueryRunner();
+    const queryRunner = catalogDataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -56,6 +56,7 @@ async function create() {
         console.error('❌ Something went wrong:', error);
     } finally {
         await queryRunner.release();
+        await catalogDataSource.destroy();
     }
 }
 

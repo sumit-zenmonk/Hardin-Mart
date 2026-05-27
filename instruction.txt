@@ -5,6 +5,7 @@ steps to run this repo code (open 2 terminal)
 
 For Creation
 3. -> npm run build && npm run migration:user:run && npm run seed:user:user
+4. -> npm run build && npm run migration:catalog:run && npm run seed:catalog:user && npm run seed:catalog:product
 
 One Click Copy Paste above commands
-npm run build && npm run migration:user:run && npm run seed:user:user
+npm run build && npm run migration:user:run && npm run seed:user:user && npm run migration:catalog:run && npm run seed:catalog:user && npm run seed:catalog:product

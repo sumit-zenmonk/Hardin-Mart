@@ -13,6 +13,7 @@ export async function createSchemas() {
         await client.connect();
 
         await client.query(`CREATE SCHEMA IF NOT EXISTS ${process.env.DB_POSTGRES_USER_SCHEMA || 'user_schema'};`);
+        await client.query(`CREATE SCHEMA IF NOT EXISTS ${process.env.DB_POSTGRES_CATALOG_SCHEMA || 'catalog_schema'};`);
 
         console.log('DB Schema Created SuccessFully');
         await client.end();

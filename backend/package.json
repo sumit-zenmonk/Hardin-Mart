@@ -22,7 +22,12 @@
     "seed:user:user": "ts-node -r tsconfig-paths/register src/module/user-module/infrastructure/database/seed/user.seed.ts",
     "migration:user:generate": "npm run typeorm -- -d dist/module/user-module/infrastructure/database/data-source.js migration:generate src/module/user-module/infrastructure/database/migrations/InitMigration",
     "migration:user:run": "npm run typeorm -- -d dist/module/user-module/infrastructure/database/data-source.js migration:run",
-    "migration:user:revert": "npm run typeorm -- -d dist/module/user-module/infrastructure/database/data-source.js migration:revert"
+    "migration:user:revert": "npm run typeorm -- -d dist/module/user-module/infrastructure/database/data-source.js migration:revert",
+    "seed:catalog:product": "ts-node -r tsconfig-paths/register src/module/catalog-module/infrastructure/database/seed/product.seed.ts",
+    "seed:catalog:user": "ts-node -r tsconfig-paths/register src/module/catalog-module/infrastructure/database/seed/user.seed.ts",
+    "migration:catalog:generate": "npm run typeorm -- -d dist/module/catalog-module/infrastructure/database/data-source.js migration:generate src/module/catalog-module/infrastructure/database/migrations/InitMigration",
+    "migration:catalog:run": "npm run typeorm -- -d dist/module/catalog-module/infrastructure/database/data-source.js migration:run",
+    "migration:catalog:revert": "npm run typeorm -- -d dist/module/catalog-module/infrastructure/database/data-source.js migration:revert"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.3.6",

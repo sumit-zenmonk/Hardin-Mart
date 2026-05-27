@@ -19,6 +19,10 @@ import { JwtHelperService } from './module/user-module/infrastructure/services/j
 import * as UserCronModule from './module/user-module/infrastructure/cron/cron.module';
 import { UserModule } from './module/user-module/feature/user/user.module';
 
+// Catalog Module
+import { catalogDataSource } from './module/catalog-module/infrastructure/database/data-source';
+import { ProductModule } from './module/catalog-module/feature/product/product.module';
+
 @Module({
   imports: [
     // common
@@ -44,6 +48,15 @@ import { UserModule } from './module/user-module/feature/user/user.module';
     }),
     UserModule,
     UserCronModule.CronModule,
+
+    // Catalog Modules
+    TypeOrmModule.forRoot({
+      name: process.env.DB_POSTGRES_CATALOG_SCHEMA || 'catalog_schema',
+      ...catalogDataSource.options,
+      retryAttempts: 10,
+      retryDelay: 5000
+    }),
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserRepository, JwtHelperService],
