@@ -17,6 +17,7 @@ export default function CartPage() {
     const dispatch = useAppDispatch();
     const { cart, loading } = useAppSelector((state: RootState) => state.cartReducer);
     const { saleProducts } = useAppSelector((state: RootState) => state.productReducer);
+    const { user } = useAppSelector((state: RootState) => state.authReducer);
     const [openUserAddressModal, setOpenUserAddressModal] = useState(false);
 
     const handleRemoveItem = async (product_uuid: string) => {
@@ -212,18 +213,22 @@ export default function CartPage() {
             <Box className={styles.paybox}>
                 {cart && cart?.items?.length > 0 && (
                     <>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handlePlaceOrder}
-                        >
-                            Place Order
-                        </Button>
+                        {user && (
+                            <>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handlePlaceOrder}
+                                >
+                                    Place Order
+                                </Button>
 
-                        <Button onClick={() => setOpenUserAddressModal(true)}>
-                            Add address
-                        </Button>
+                                <Button onClick={() => setOpenUserAddressModal(true)}>
+                                    Add address
+                                </Button>
 
+                            </>
+                        )}
                         <Button
                             className={styles.clearcart}
                             onClick={handleClearCart}
