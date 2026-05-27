@@ -26,8 +26,8 @@ async function create() {
 
     await billingDataSource.initialize();
 
-    const bcryptService = new BcryptService();
-    const hashedPassword = await bcryptService.hashPassword("123");
+    // const bcryptService = new BcryptService();
+    // const hashedPassword = await bcryptService.hashPassword("123");
 
     const queryRunner = billingDataSource.createQueryRunner();
     await queryRunner.connect();
@@ -42,7 +42,7 @@ async function create() {
                 id: user.id,
                 uuid: user.uuid,
                 email: user.email,// faker.internet.email(),
-                password: hashedPassword,
+                // password: hashedPassword,
                 name: user.name,// faker.person.fullName(),
             });
 
