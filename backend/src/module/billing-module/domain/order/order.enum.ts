@@ -5,3 +5,10 @@ export enum OrderStatusEnum {
     DELIVERED = 'delivered',
     RETURNED = 'returned'
 }
+
+export enum OrderPaymentStatusEnum {
+    PENDING = 'pending',
+    PAID = 'paid',
+    CANCELLED = 'cancelled',
+    REFUND = 'refund'
+}

@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Generated, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { WalletEntity } from "../wallet/wallet.entity";
 import { WalletHistoryEntity } from "../wallet-history/wallet-history.entity";
+import { OrderEntity } from "../order/order.entity";
 
 @Entity('user')
 export class UserEntity {
@@ -26,6 +27,9 @@ export class UserEntity {
 
     @OneToMany(() => WalletHistoryEntity, wallet_history => wallet_history.user)
     wallet_histories: WalletHistoryEntity[];
+
+    @OneToMany(() => OrderEntity, order => order.user)
+    orders: OrderEntity[];
 
     @CreateDateColumn()
     created_at: Date;

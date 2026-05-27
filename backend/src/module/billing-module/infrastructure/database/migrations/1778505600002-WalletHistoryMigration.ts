@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class WalletHistoryMigration1778505600003 implements MigrationInterface {
-    name = "WalletHistoryMigration1778505600003";
+export class WalletHistoryMigration1778505600002 implements MigrationInterface {
+    name = "WalletHistoryMigration1778505600002";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "billing_schema"."wallet_history_type_enum" AS ENUM('credit', 'debit', 'topup', 'refund');`);

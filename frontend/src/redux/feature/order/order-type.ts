@@ -12,7 +12,6 @@ export interface OrderItem {
 export interface Order {
     uuid: string;
     user_uuid: string;
-    order_status: string;
     items: OrderItem[];
     created_at: string;
     updated_at: string;
