@@ -47,14 +47,17 @@ export class CreateOrderService {
             exchange_name: ExchangeNameEnum.ORDER_EXCHANGE,
             routing_key: RoutingKeyEnum.ORDER_CREATED,
             message_payload: {
+                order_id: order.id,
                 order_uuid: order.uuid,
                 user_uuid: user.uuid,
                 items: items.map((item, index) => ({
                     uuid: orderItems[index].uuid,
+                    id: orderItems[index].id,
                     product_uuid: item.product_uuid,
                     quantity: item.quantity,
+                    created_at: orderItems[index].created_at,
                 })),
-                created_at: new Date(),
+                created_at: order.created_at,
             },
         });
 

@@ -24,7 +24,7 @@ import { catalogDataSource } from './module/catalog-module/infrastructure/databa
 import * as ProductProductModule from './module/catalog-module/feature/product/product.module';
 
 // Sale Module
-import * as SaleCronModule from './module/user-module/infrastructure/cron/cron.module';
+import * as SaleCronModule from './module/sale-module/infrastructure/cron/cron.module';
 import { saleDataSource } from './module/sale-module/infrastructure/database/data-source';
 import { OrderModule } from './module/sale-module/feature/order/order.module';
 import * as SaleProductModule from './module/sale-module/feature/product/product.module';

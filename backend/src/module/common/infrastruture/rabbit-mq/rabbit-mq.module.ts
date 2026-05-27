@@ -20,8 +20,12 @@ import * as SaleUserRegisterHandler from 'src/module/sale-module/feature/user/us
 // Billing Module
 import * as BillingmoduleUserRepo from 'src/module/billing-module/infrastructure/repository/user.repository';
 import * as BillingmoduleInboxRepo from 'src/module/billing-module/infrastructure/repository/inbox.repository';
+import * as BillingmoduleOrderRepo from 'src/module/billing-module/infrastructure/repository/order.repository';
+import * as BillingmoduleOrderItemRepo from 'src/module/billing-module/infrastructure/repository/order.item.repository';
 import * as BillingUserRegisterService from 'src/module/billing-module/feature/user/user-register/user-register.service';
+import * as BillingOrderCreatedService from 'src/module/billing-module/feature/order/order-created/order-created.handler';
 import * as BillingUserConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
+import * as BillingOrderCreatedConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-created/order-created.consumer';
 
 @Global()
 @Module({
@@ -48,8 +52,12 @@ import * as BillingUserConsumer from 'src/module/billing-module/infrastructure/r
         // Billing Module
         BillingmoduleUserRepo.UserRepository,
         BillingmoduleInboxRepo.InboxRepository,
-        BillingUserRegisterService.UserRegisterService,
+        BillingmoduleOrderRepo.OrderRepository,
+        BillingmoduleOrderItemRepo.OrderItemRepository,
+        BillingUserRegisterService.UserRegisterService, 
+        BillingOrderCreatedService.OrderCreatedService,
         BillingUserConsumer.UserRegisteredConsumer,
+        BillingOrderCreatedConsumer.OrderCreatedConsumer,
     ],
     exports: [RabbitMQService],
 })

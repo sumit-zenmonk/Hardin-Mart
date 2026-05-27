@@ -23,14 +23,15 @@ export interface UserRegisteredMQEventPayload {
 }
 
 export interface OrderCreatedMQEventPayload {
+    order_id: number;
     order_uuid: string;
     user_uuid: string;
-
     items: {
+        id: number;
         uuid: string;
         product_uuid: string;
         quantity: number;
+        created_at: Date;
     }[];
-
     created_at: Date;
 }
