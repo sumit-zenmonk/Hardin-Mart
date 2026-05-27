@@ -83,6 +83,14 @@ export default function HeaderComp() {
                         </Button>
 
                         <Button
+                            onClick={() => {
+                                router.push("/wallet")
+                            }}
+                        >
+                            Wallet
+                        </Button>
+
+                        <Button
                             className={styles.logoutbtn}
                             onClick={async () => { await handleLogOut() }}
                         >

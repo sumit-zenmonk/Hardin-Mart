@@ -9,7 +9,7 @@ import { GetPayHistoryModule } from "./get-pay-history/get-pay-history.module";
         GetPayHistoryModule,
         RouterModule.register([
             {
-                path: 'walllet',
+                path: 'wallet',
                 children: [
                     { path: '', module: GetAccountModule },
                     { path: '', module: GetPayHistoryModule },
