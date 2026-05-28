@@ -100,7 +100,7 @@ export default function OrderPage() {
                                             <Step
                                                 key={step}
                                                 completed={
-                                                    order?.user_uuid === OrderStatusEnum.DELIVERED
+                                                    shipmentOrder?.order_status === OrderStatusEnum.DELIVERED
                                                         ? true
                                                         : undefined
                                                 }

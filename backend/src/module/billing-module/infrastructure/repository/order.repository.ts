@@ -25,7 +25,6 @@ export class OrderRepository extends Repository<OrderEntity> {
                 uuid: uuid
             },
             relations: {
-                items: true,
                 user: true,
             }
         });
@@ -39,7 +38,6 @@ export class OrderRepository extends Repository<OrderEntity> {
                 user_uuid: user_uuid
             },
             relations: {
-                items: true,
                 user: true,
             }
         });
@@ -49,9 +47,6 @@ export class OrderRepository extends Repository<OrderEntity> {
     async getOrderListing(user: UserEntity, offset?: number, limit?: number) {
         const [data, total] = await this.findAndCount({
             where: { user_uuid: user.uuid },
-            relations: {
-                items: true,
-            },
             order: {
                 created_at: 'DESC'
             },

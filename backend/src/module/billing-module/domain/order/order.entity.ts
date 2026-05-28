@@ -1,6 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserEntity } from "../user/user.entity";
-import { OrderItemEntity } from "../order-item/order-item.entity";
 import { OrderPaymentStatusEnum } from "./order.enum";
 
 @Entity('order')
@@ -28,9 +27,6 @@ export class OrderEntity {
     @ManyToOne(() => UserEntity, (user) => user.orders)
     @JoinColumn({ name: "user_uuid" })
     user: UserEntity;
-
-    @OneToMany(() => OrderItemEntity, item => item.order)
-    items: OrderItemEntity[];
 
     @CreateDateColumn()
     created_at: Date;

@@ -21,7 +21,6 @@ import * as SaleUserRegisterHandler from 'src/module/sale-module/feature/user/us
 import * as BillingUserRepo from 'src/module/billing-module/infrastructure/repository/user.repository';
 import * as BillingInboxRepo from 'src/module/billing-module/infrastructure/repository/inbox.repository';
 import * as BillingOrderRepo from 'src/module/billing-module/infrastructure/repository/order.repository';
-import * as BillingOrderItemRepo from 'src/module/billing-module/infrastructure/repository/order.item.repository';
 import * as BillingUserRegisterService from 'src/module/billing-module/feature/user/user-register/user-register.service';
 import * as BillingOrderCreatedService from 'src/module/billing-module/feature/order/order-created/order-created.handler';
 import * as BillingUserRegisteredConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
@@ -64,7 +63,6 @@ import * as ShipmentOrderPaidConsumer from 'src/module/shipment-module/infrastru
         BillingUserRepo.UserRepository,
         BillingInboxRepo.InboxRepository,
         BillingOrderRepo.OrderRepository,
-        BillingOrderItemRepo.OrderItemRepository,
         BillingUserRegisterService.UserRegisterService,
         BillingOrderCreatedService.OrderCreatedService,
         BillingUserRegisteredConsumer.UserRegisteredConsumer,

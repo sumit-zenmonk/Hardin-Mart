@@ -9,7 +9,6 @@ import { WalletEntity } from "../../domain/wallet/wallet.entity";
 import { WalletHistoryEntity } from "../../domain/wallet-history/wallet-history.entity";
 import { OutboxEntity } from "../../domain/outbox/outbox.entity";
 import { OrderEntity } from "../../domain/order/order.entity";
-import { OrderItemEntity } from "../../domain/order-item/order-item.entity";
 
 const options: DataSourceOptions = {
     type: process.env.DB_POSTGRES_TYPE as any,
@@ -21,7 +20,7 @@ const options: DataSourceOptions = {
     entities: [
         UserEntity, InboxEntity, OutboxEntity,
         WalletEntity, WalletHistoryEntity,
-        OrderEntity, OrderItemEntity,
+        OrderEntity,
     ],
     schema: process.env.DB_POSTGRES_BILLING_SCHEMA || 'billing_schema',
     synchronize: false,
