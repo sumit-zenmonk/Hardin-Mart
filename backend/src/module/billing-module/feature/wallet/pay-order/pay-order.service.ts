@@ -5,12 +5,15 @@ import { PayOrderDto } from "./pay-order.dto";
 import { OrderRepository } from "src/module/billing-module/infrastructure/repository/order.repository";
 import { OrderPaymentStatusEnum } from "src/module/billing-module/domain/order/order.enum";
 import { WalletHistoryTypeEnum } from "src/module/billing-module/domain/wallet-history/wallet.enum";
+import { OutboxRepository } from "src/module/billing-module/infrastructure/repository/outbox.repository";
+import { ExchangeNameEnum, RoutingKeyEnum } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum";
 
 @Injectable()
 export class PayOrderService {
     constructor(
         private readonly billingRepository: BillingRepository,
         private readonly orderRepository: OrderRepository,
+        private readonly outboxRepository: OutboxRepository,
     ) { }
 
     async payOrder(user: UserEntity, body: PayOrderDto) {
@@ -31,9 +34,10 @@ export class PayOrderService {
             throw new BadRequestException("Balance is low . Please do add amount");
         }
 
-        // deduct amount from wallet
+        // deduct amount from wallet and payment status changed
         wallet.balance -= order.total_price;
         await this.billingRepository.saveWallet(wallet);
+        await this.orderRepository.updateOrderPaymentStatus(order_uuid, OrderPaymentStatusEnum.PAID);
 
         // make PayUsingCardment history
         await this.billingRepository.createHistory({
@@ -42,6 +46,14 @@ export class PayOrderService {
             amount: order.total_price,
             type: WalletHistoryTypeEnum.DEBIT,
             description: `Paid for order '${order.uuid}`,
+        });
+        // make entry of publish exchange
+        await this.outboxRepository.createOutboxntry({
+            exchange_name: ExchangeNameEnum.ORDER_EXCHANGE,
+            routing_key: RoutingKeyEnum.ORDER_PAID,
+            message_payload: {
+                order_uuid,
+            },
         });
 
         return;

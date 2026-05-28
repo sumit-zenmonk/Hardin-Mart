@@ -115,7 +115,7 @@ export const getShipmentOrders = createAsyncThunk<
             if (!res.ok) {
                 throw new Error(result.message);
             }
-console.log(JSON.stringify(result));
+
             return result;
         } catch (error: any) {
             return rejectWithValue(error.message);

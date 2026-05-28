@@ -180,7 +180,7 @@ export default function OrderPage() {
                                                 variant="body2"
                                                 sx={{ mt: 1, textAlign: "center" }}
                                             >
-                                                Payment Status: {OrderPaymentStatusEnum.PENDING.toUpperCase()}
+                                                Payment Status: {billingOrder?.payment_status.toUpperCase() || OrderPaymentStatusEnum.PENDING.toUpperCase()}
                                             </Typography>
 
                                             <Typography

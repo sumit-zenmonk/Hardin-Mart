@@ -26,6 +26,7 @@ export interface BillingOrder {
     uuid: string;
     user_uuid: string;
     total_price?: string;
+    payment_status: OrderPaymentStatusEnum;
     items: OrderItem[];
     created_at: string;
     updated_at: string;

@@ -46,18 +46,6 @@ export class OrderRepository extends Repository<OrderEntity> {
         )
     }
 
-    async updateOrderStatusIfNotReturned(uuid: string, status: OrderStatusEnum) {
-        return await this.update(
-            {
-                uuid: uuid,
-                order_status: Not(OrderStatusEnum.RETURNED)
-            },
-            {
-                order_status: status
-            }
-        )
-    }
-
     async findByUserUuidAndOrderUuid(user_uuid: string, order_uuid: string) {
         const user = await this.findOne({
             where: {

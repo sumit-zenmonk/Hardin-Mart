@@ -37,3 +37,7 @@ export interface OrderCreatedMQEventPayload {
     }[];
     created_at: Date;
 }
+
+export interface OrderPaidMQEventPayload {
+    order_uuid: string;
+}

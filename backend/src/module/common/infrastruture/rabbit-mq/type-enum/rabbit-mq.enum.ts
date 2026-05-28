@@ -25,7 +25,8 @@ export enum ExchangeNameEnum {
 export enum RoutingKeyEnum {
     USER_REGISTERED = 'user.registered',
 
-    ORDER_CREATED = 'order.created'
+    ORDER_CREATED = 'order.created',
+    ORDER_PAID = 'order.paid',
 }
 
 // queue name (module name) + routing key + endfix(queue)
@@ -37,4 +38,6 @@ export enum QueueEnum {
 
     BILLING_ORDER_CREATED_QUEUE = 'billing.order.created.queue',
     SHIPMENT_ORDER_CREATED_QUEUE = 'shipment.order.created.queue',
+
+    SHIPMENT_ORDER_PAID_QUEUE = 'shipment.order.paid.queue'
 }
