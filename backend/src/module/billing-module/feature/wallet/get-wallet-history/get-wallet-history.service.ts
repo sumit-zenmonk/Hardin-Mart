@@ -3,12 +3,12 @@ import { BillingRepository } from "src/module/billing-module/infrastructure/repo
 import { UserEntity } from "src/module/user-module/domain/user/user.entity";
 
 @Injectable()
-export class GetPayHistoryService {
+export class GetWalletHistoryService {
     constructor(
         private readonly repository: BillingRepository,
     ) { }
 
-    async getPayHistories(user: UserEntity) {
+    async getWalletHistory(user: UserEntity) {
         const history = await this.repository.findHistories(user.uuid);
 
         return {

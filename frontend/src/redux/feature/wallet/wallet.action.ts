@@ -79,7 +79,7 @@ export const getwalletHistories = createAsyncThunk<
         try {
             const token = getState().authReducer.token || "";
 
-            const res = await fetch(`${API_URL}/wallet/histories`, {
+            const res = await fetch(`${API_URL}/wallet/history`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
