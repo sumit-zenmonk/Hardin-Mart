@@ -137,6 +137,7 @@ export default function CartPage() {
                 <Box className={styles.productWrapper}>
                     {cart.items.map((item: CartItem) => {
                         const saleProduct = saleProducts.find((product) => product.uuid === item.product_uuid);
+                        const shipmentProduct = ShipmentProducts ? ShipmentProducts.find((product) => product.uuid === item.product_uuid) : null;
 
                         return (
                             <Card key={item.product_uuid} className={styles.card}>
@@ -166,6 +167,10 @@ export default function CartPage() {
 
                                         <Typography className={styles.price}>
                                             Price: ₹ {Number(saleProduct?.price || 0) * item.quantity}
+                                        </Typography>
+
+                                        <Typography className={styles.stock}>
+                                            Stock: ₹ {Number(shipmentProduct?.stock || 0)}
                                         </Typography>
                                     </Box>
 
@@ -197,6 +202,7 @@ export default function CartPage() {
                                         onClick={() =>
                                             handleUpdateQuantity(item.product_uuid, item.quantity + 1)
                                         }
+                                        disabled={item.quantity >= Number(shipmentProduct?.stock || 0)}
                                     >
                                         +
                                     </Button>
