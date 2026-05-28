@@ -134,9 +134,13 @@ export default function OrderPage() {
                                             Total Price: {billingOrder?.total_price}
                                         </Typography>
 
-                                        <Button onClick={() => handlePay(order.uuid)}>
-                                            Pay
-                                        </Button>
+                                        {
+                                            billingOrder?.payment_status == OrderPaymentStatusEnum.PENDING
+                                            &&
+                                            <Button onClick={() => handlePay(order.uuid)}>
+                                                Pay
+                                            </Button>
+                                        }
 
                                         <Box className={styles.slidercomp}>
                                             <Slider {...sliderSettings}>

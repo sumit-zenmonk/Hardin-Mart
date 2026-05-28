@@ -11,6 +11,7 @@ import { PersistGate } from "redux-persist/lib/integration/react";
 import { StyledEngineProvider } from "@mui/material";
 import HeaderComp from "@/component/header-comp/header-comp";
 import Image from 'next/image';
+import RootSocketListener from '@/layout/socket/layout';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+                <RootSocketListener />
                 <HeaderComp />
                 {children}
               </SnackbarProvider>

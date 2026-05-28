@@ -3,6 +3,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { BillingOrder, SaleOrder, OrderState, ShipmentOrder } from "./order-type";
 import { createOrder, getBillingOrders, getSaleOrders, getShipmentOrders } from "./order-action";
+import { OrderPaymentStatusEnum, OrderStatusEnum } from "@/enum/order.enum";
 
 const initialState: OrderState = {
     saleOrders: [],
@@ -27,6 +28,28 @@ const orderSlice = createSlice({
             state.shipmentOrders = [];
             state.error = null;
             state.status = "pending";
+        },
+        updateBillingOrderStatus: (
+            state,
+            action: {
+                payload: { order_uuid: string; payment_status: OrderPaymentStatusEnum; };
+            }
+        ) => {
+            const order = state.billingOrders.find((item) => item.uuid === action.payload.order_uuid);
+            if (order) {
+                order.payment_status = action.payload.payment_status;
+            }
+        },
+        updateShipmentOrderStatus: (
+            state,
+            action: {
+                payload: { order_uuid: string; order_status: OrderStatusEnum; };
+            }
+        ) => {
+            const order = state.shipmentOrders.find((item) => item.uuid === action.payload.order_uuid);
+            if (order) {
+                order.order_status = action.payload.order_status;
+            }
         },
     },
     extraReducers: (builder) => {
@@ -149,5 +172,5 @@ const orderSlice = createSlice({
     },
 });
 
-export const { resetOrderError, clearOrderState, } = orderSlice.actions;
+export const { resetOrderError, clearOrderState, updateBillingOrderStatus, updateShipmentOrderStatus } = orderSlice.actions;
 export default orderSlice.reducer;

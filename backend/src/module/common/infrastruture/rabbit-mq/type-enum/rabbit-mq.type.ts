@@ -40,4 +40,5 @@ export interface OrderCreatedMQEventPayload {
 
 export interface OrderPaidMQEventPayload {
     order_uuid: string;
+    user_uuid: string;
 }

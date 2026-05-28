@@ -7,6 +7,8 @@ import { OrderPaymentStatusEnum } from "src/module/billing-module/domain/order/o
 import { WalletHistoryTypeEnum } from "src/module/billing-module/domain/wallet-history/wallet.enum";
 import { OutboxRepository } from "src/module/billing-module/infrastructure/repository/outbox.repository";
 import { ExchangeNameEnum, RoutingKeyEnum } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum";
+import { SocketService } from "src/module/common/infrastruture/socket/socket.service";
+import { SocketEventNameEnum } from "src/module/common/infrastruture/socket/socket.enum";
 
 @Injectable()
 export class PayOrderService {
@@ -14,6 +16,7 @@ export class PayOrderService {
         private readonly billingRepository: BillingRepository,
         private readonly orderRepository: OrderRepository,
         private readonly outboxRepository: OutboxRepository,
+        private readonly socketService: SocketService,
     ) { }
 
     async payOrder(user: UserEntity, body: PayOrderDto) {
@@ -53,8 +56,11 @@ export class PayOrderService {
             routing_key: RoutingKeyEnum.ORDER_PAID,
             message_payload: {
                 order_uuid,
+                user_uuid: user.uuid
             },
         });
+
+        await this.socketService.emitToUser(user.uuid, SocketEventNameEnum.ORDER__PAYMENT_STATUS_CHANGED, { order_uuid: order_uuid, payment_status: OrderPaymentStatusEnum.PAID });
 
         return;
     }
