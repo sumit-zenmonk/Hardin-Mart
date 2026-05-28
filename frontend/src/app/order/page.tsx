@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Box, Card, CardContent, CircularProgress, Container, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CircularProgress, Container, Typography } from "@mui/material";
 import { RootState, } from "@/redux/store";
 import styles from "./order.module.css";
 import { getSaleOrders, getBillingOrders, getShipmentOrders } from "@/redux/feature/order/order-action";
@@ -16,6 +16,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
+import { payOrder } from "@/redux/feature/wallet/wallet.action";
 
 export default function OrderPage() {
     const dispatch = useAppDispatch();
@@ -55,6 +56,14 @@ export default function OrderPage() {
 
     const getActiveStep = (status: OrderStatusEnum) => {
         return orderSteps.indexOf(status);
+    };
+
+    const handlePay = async (order_uuid: string) => {
+        try {
+            await dispatch(payOrder({ order_uuid })).unwrap();
+        } catch (err: any) {
+            enqueueSnackbar(err, { variant: "warning" });
+        }
     };
 
     return (
@@ -125,6 +134,10 @@ export default function OrderPage() {
                                             Total Price: {billingOrder?.total_price}
                                         </Typography>
 
+                                        <Button onClick={() => handlePay(order.uuid)}>
+                                            Pay
+                                        </Button>
+
                                         <Box className={styles.slidercomp}>
                                             <Slider {...sliderSettings}>
                                                 {order.items.map((item: OrderItem) => {
@@ -167,7 +180,7 @@ export default function OrderPage() {
                                                 variant="body2"
                                                 sx={{ mt: 1, textAlign: "center" }}
                                             >
-                                                Payment Status: {shipmentOrder?.payment_status.toUpperCase() || OrderPaymentStatusEnum.PENDING.toUpperCase()}
+                                                Payment Status: {OrderPaymentStatusEnum.PENDING.toUpperCase()}
                                             </Typography>
 
                                             <Typography

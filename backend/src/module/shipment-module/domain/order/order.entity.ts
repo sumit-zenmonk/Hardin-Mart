@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Generated, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserEntity } from "../user/user.entity";
-import { OrderPaymentStatusEnum, OrderStatusEnum } from "./order.enum";
+import { OrderStatusEnum } from "./order.enum";
 import { UserAddressEntity } from "../user_address/user.address.entity";
 
 @Entity('order')
@@ -21,9 +21,6 @@ export class OrderEntity {
 
     @Column({ type: "uuid", nullable: false })
     address_uuid: string;
-
-    @Column({ type: "enum", enum: OrderPaymentStatusEnum, default: OrderPaymentStatusEnum.PENDING, nullable: false })
-    payment_status: OrderPaymentStatusEnum;
 
     @Column({ type: "enum", enum: OrderStatusEnum, default: OrderStatusEnum.PENDING, nullable: false })
     order_status: OrderStatusEnum;

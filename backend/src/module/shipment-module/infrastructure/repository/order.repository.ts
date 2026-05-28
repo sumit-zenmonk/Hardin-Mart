@@ -3,7 +3,7 @@ import { DataSource, Not, Repository } from "typeorm";
 import { InjectDataSource } from "@nestjs/typeorm";
 import { OrderEntity } from "../../domain/order/order.entity";
 import { UserEntity } from "../../domain/user/user.entity";
-import { OrderPaymentStatusEnum, OrderStatusEnum } from "../../domain/order/order.enum";
+import { OrderStatusEnum } from "../../domain/order/order.enum";
 
 @Injectable()
 export class OrderRepository extends Repository<OrderEntity> {
@@ -33,17 +33,6 @@ export class OrderRepository extends Repository<OrderEntity> {
         });
 
         return { data, total };
-    }
-
-    async updateOrderPaymentStatus(uuid: string, status: OrderPaymentStatusEnum) {
-        return await this.update(
-            {
-                uuid: uuid
-            },
-            {
-                payment_status: status
-            }
-        )
     }
 
     async updateOrderStatus(uuid: string, status: OrderStatusEnum) {
@@ -85,7 +74,6 @@ export class OrderRepository extends Repository<OrderEntity> {
     async findTopTenPaidButNotDeliveredOrderStatus() {
         return await this.find({
             where: {
-                payment_status: OrderPaymentStatusEnum.PAID,
                 order_status: Not(OrderStatusEnum.RETURNED)
             },
             order: {

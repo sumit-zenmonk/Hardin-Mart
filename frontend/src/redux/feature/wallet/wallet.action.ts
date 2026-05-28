@@ -2,7 +2,7 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
-import { AddAmountPayload, AddCardPayload, PayPayload, } from "./wallet.type";
+import { AddAmountPayload, AddCardPayload, PayOrderPayload, PayPayload, } from "./wallet.type";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -85,6 +85,38 @@ export const getwalletHistories = createAsyncThunk<
                     "Content-Type": "application/json",
                     Authorization: token,
                 },
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                throw new Error(result.message);
+            }
+
+            return result;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const payOrder = createAsyncThunk<
+    any,
+    PayOrderPayload,
+    { state: RootState }
+>(
+    "wallet/order/pay",
+    async (payload, { getState, rejectWithValue }) => {
+        try {
+            const token = getState().authReducer.token || "";
+
+            const res = await fetch(`${API_URL}/wallet/order/pay`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token,
+                },
+                body: JSON.stringify(payload),
             });
 
             const result = await res.json();

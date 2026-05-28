@@ -37,6 +37,10 @@ export interface AddAmountPayload {
     amount: number;
 }
 
+export interface PayOrderPayload {
+    order_uuid: string
+}
+
 export interface PayPayload {
     amount: number;
     order_uuid: string

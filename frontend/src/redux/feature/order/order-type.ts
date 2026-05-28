@@ -51,7 +51,6 @@ export interface ShipmentOrder {
     uuid: string;
     user_uuid: string;
     address_uuid: string;
-    payment_status: OrderPaymentStatusEnum;
     order_status: OrderStatusEnum;
     address: Address;
     created_at: string;

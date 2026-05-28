@@ -4,6 +4,7 @@ export class orderMigration1778505600003 implements MigrationInterface {
     name = "orderMigration1778505600003";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`CREATE TYPE "shipment_schema"."payment_status_type_enum" AS ENUM('pending', 'paid', 'cancelled','refund');`);
 
         await queryRunner.createTable(new Table({
             name: "order",
@@ -12,6 +13,7 @@ export class orderMigration1778505600003 implements MigrationInterface {
                 { name: "id", type: "bigint", isGenerated: true, generationStrategy: "increment", isUnique: true, isNullable: false },
                 { name: "user_uuid", type: "uuid", isNullable: false },
                 { name: "total_price", type: "decimal", precision: 12, scale: 2, default: 0, isNullable: false, },
+                { name: "payment_status", type: `"shipment_schema"."payment_status_type_enum"`, default: `'pending'` },
                 { name: "created_at", type: "timestamp", default: "now()" },
                 { name: "updated_at", type: "timestamp", default: "now()" },
                 { name: "deleted_at", type: "timestamp", isNullable: true }
