@@ -27,9 +27,9 @@ export default function OrderPage() {
     const [hasMore, setHasMore] = useState(true);
 
     useEffect(() => {
-        if (!saleOrders?.length) {
+        // if (!saleOrders?.length) {
             fetchOrders();
-        }
+        // }
     }, []);
 
     const fetchOrders = async () => {
@@ -47,7 +47,6 @@ export default function OrderPage() {
     };
 
     const orderSteps = [
-        OrderStatusEnum.PENDING,
         OrderStatusEnum.PLACED,
         OrderStatusEnum.BILLED,
         OrderStatusEnum.DELIVERED,
@@ -191,7 +190,7 @@ export default function OrderPage() {
                                                 variant="body2"
                                                 sx={{ mt: 1, textAlign: "center" }}
                                             >
-                                                Order Status: {shipmentOrder?.order_status.toUpperCase() || OrderStatusEnum.PENDING.toUpperCase()}
+                                                Order Status: {shipmentOrder?.order_status.toUpperCase() || OrderStatusEnum.PLACED.toUpperCase()}
                                             </Typography>
                                         </Box>
                                     </CardContent>

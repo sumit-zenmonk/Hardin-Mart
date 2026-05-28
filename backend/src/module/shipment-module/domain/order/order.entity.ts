@@ -22,7 +22,7 @@ export class OrderEntity {
     @Column({ type: "uuid", nullable: false })
     address_uuid: string;
 
-    @Column({ type: "enum", enum: OrderStatusEnum, default: OrderStatusEnum.PENDING, nullable: false })
+    @Column({ type: "enum", enum: OrderStatusEnum, default: OrderStatusEnum.PLACED, nullable: false })
     order_status: OrderStatusEnum;
 
     @ManyToOne(() => UserEntity, (user) => user.orders)
