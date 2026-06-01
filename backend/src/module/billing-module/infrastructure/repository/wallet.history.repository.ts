@@ -1,32 +1,24 @@
 import { Injectable } from "@nestjs/common";
 import { InjectDataSource } from "@nestjs/typeorm";
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { WalletHistoryEntity } from "../../domain/wallet-history/wallet-history.entity";
 
 @Injectable()
-export class WalletHistoryRepository {
+export class WalletHistoryRepository extends Repository<WalletHistoryEntity> {
     constructor(
-        @InjectDataSource(
-            process.env.DB_POSTGRES_BILLING_SCHEMA || "billing_schema",
-        )
+        @InjectDataSource(process.env.DB_POSTGRES_BILLING_SCHEMA || 'billing_schema')
         private readonly dataSource: DataSource,
-    ) { }
-
-    private getRepository() {
-        return this.dataSource.getRepository(
-            WalletHistoryEntity,
-        );
+    ) {
+        super(WalletHistoryEntity, dataSource.createEntityManager());
     }
 
     async createHistory(payload: Partial<WalletHistoryEntity>) {
-        const repository = this.getRepository();
-        const history = repository.create(payload);
-
-        return await repository.save(history);
+        const history = this.create(payload);
+        return await this.save(history);
     }
 
     async findHistories(user_uuid: string) {
-        return await this.getRepository().find({
+        return await this.find({
             where: {
                 user_uuid,
             },
@@ -37,7 +29,7 @@ export class WalletHistoryRepository {
     }
 
     async findHistoryByOrderUuid(order_uuid: string) {
-        return await this.getRepository().findOne({
+        return await this.findOne({
             where: {
                 order_uuid,
             },
