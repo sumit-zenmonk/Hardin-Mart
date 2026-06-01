@@ -140,7 +140,7 @@ export default function Home() {
                     </Typography>
 
                     <Typography className={styles.stock}>
-                      Stock: ${shipmentProduct?.stock || 0}
+                      Stock: {shipmentProduct?.stock || 0}
                     </Typography>
 
                     <Button

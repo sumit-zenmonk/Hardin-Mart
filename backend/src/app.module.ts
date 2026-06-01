@@ -26,20 +26,21 @@ import * as ProductProductModule from './module/catalog-module/feature/product/p
 // Sale Module
 import * as SaleCronModule from './module/sale-module/infrastructure/cron/cron.module';
 import { saleDataSource } from './module/sale-module/infrastructure/database/data-source';
-import { OrderModule } from './module/sale-module/feature/order/order.module';
+import * as SaleOrderModule from './module/sale-module/feature/order/order.module';
 import * as SaleProductModule from './module/sale-module/feature/product/product.module';
 
 // Billing Module
 import { billingDataSource } from './module/billing-module/infrastructure/database/data-source';
 import { WalletModule } from './module/billing-module/feature/wallet/wallet.module';
-import * as billingOrderModule from './module/billing-module/feature/order/order.module';
-import * as billingCronModule from './module/billing-module/infrastructure/cron/cron.module';
+import * as BillingOrderModule from './module/billing-module/feature/order/order.module';
+import * as BillingCronModule from './module/billing-module/infrastructure/cron/cron.module';
 
 // Shipment Module
 import { shipmentDataSource } from './module/shipment-module/infrastructure/database/data-source';
 import { UserAddressModule } from './module/shipment-module/feature/user/user-address.module';
 import * as ShipmentProductModule from './module/shipment-module/feature/product/product.module';
 import * as ShipmentOrderModule from './module/shipment-module/feature/order/order.module';
+import * as ShipmentCronModule from './module/shipment-module/infrastructure/cron/cron.module';
 
 @Module({
   imports: [
@@ -83,7 +84,7 @@ import * as ShipmentOrderModule from './module/shipment-module/feature/order/ord
       retryAttempts: 10,
       retryDelay: 5000
     }),
-    OrderModule,
+    SaleOrderModule.OrderModule,
     SaleCronModule.CronModule,
     SaleProductModule.ProductModule,
 
@@ -95,8 +96,8 @@ import * as ShipmentOrderModule from './module/shipment-module/feature/order/ord
       retryDelay: 5000
     }),
     WalletModule,
-    billingOrderModule.OrderModule,
-    billingCronModule.CronModule,
+    BillingOrderModule.OrderModule,
+    BillingCronModule.CronModule,
 
     // shipment Modules
     TypeOrmModule.forRoot({
@@ -108,6 +109,7 @@ import * as ShipmentOrderModule from './module/shipment-module/feature/order/ord
     UserAddressModule,
     ShipmentProductModule.ProductModule,
     ShipmentOrderModule.OrderModule,
+    ShipmentCronModule.CronModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserRepository, JwtHelperService],

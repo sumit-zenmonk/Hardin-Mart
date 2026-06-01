@@ -12,6 +12,7 @@ import { ExchangeNameEnum, RoutingKeyEnum } from "src/module/common/infrastrutur
 import { SocketService } from "src/module/common/infrastruture/socket/socket.service";
 import { SocketEventNameEnum } from "src/module/common/infrastruture/socket/socket.enum";
 import { WalletEntity } from "src/module/billing-module/domain/wallet/wallet.entity";
+import { OrderStatusEnum } from "src/module/shipment-module/domain/order/order.enum";
 
 @Injectable()
 export class PayOrderService {
@@ -49,7 +50,7 @@ export class PayOrderService {
             if (!order) {
                 throw new BadRequestException("Order not found");
             }
-            if (order.payment_status !== OrderPaymentStatusEnum.PENDING) {
+            if (order.payment_status == OrderPaymentStatusEnum.REFUND || order.payment_status == OrderPaymentStatusEnum.PAID) {
                 throw new BadRequestException("Order payment can't able to process now");
             }
             if (wallet.balance < order.total_price) {
@@ -107,6 +108,11 @@ export class PayOrderService {
                     order_uuid,
                     payment_status: OrderPaymentStatusEnum.FAILED
                 }
+            );
+            await this.socketService.emitToUser(
+                user.uuid,
+                SocketEventNameEnum.ORDER_STATUS_CHANGED,
+                { order_uuid: order_uuid, order_status: OrderStatusEnum.BILLED }
             );
             throw error;
         } finally {

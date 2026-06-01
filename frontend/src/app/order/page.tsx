@@ -49,8 +49,8 @@ export default function OrderPage() {
     const orderSteps = [
         OrderStatusEnum.PLACED,
         OrderStatusEnum.BILLED,
-        OrderStatusEnum.SHIPPED,
-        OrderStatusEnum.DELIVERED,
+        OrderStatusEnum.READY_TO_SHIP,
+        // OrderStatusEnum.CANCELLED,
     ];
 
     const getActiveStep = (status: OrderStatusEnum) => {
@@ -100,7 +100,7 @@ export default function OrderPage() {
                                             <Step
                                                 key={step}
                                                 completed={
-                                                    shipmentOrder?.order_status === OrderStatusEnum.DELIVERED
+                                                    shipmentOrder?.order_status === OrderStatusEnum.READY_TO_SHIP
                                                         ? true
                                                         : undefined
                                                 }
