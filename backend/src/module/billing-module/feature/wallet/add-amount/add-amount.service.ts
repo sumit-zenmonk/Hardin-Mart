@@ -19,10 +19,10 @@ export class AddAmountService {
             throw new BadRequestException("Amount must be greater than zero");
         }
 
-        let wallet = await this.walletRepository.findWallet(user.uuid);
-        if (!wallet) {
-            wallet = await this.walletRepository.createWallet({ user_uuid: user.uuid, balance: 0 });
-        }
+        const wallet = await this.walletRepository.upsertWallet(user.uuid);
+        // if (!wallet) {
+        //     wallet = await this.walletRepository.createWallet({ user_uuid: user.uuid, balance: 0 });
+        // }
 
         wallet.balance += amount;
         await this.walletRepository.saveWallet(wallet);

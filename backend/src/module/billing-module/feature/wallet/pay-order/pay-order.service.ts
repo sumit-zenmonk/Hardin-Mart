@@ -31,10 +31,10 @@ export class PayOrderService {
 
         try {
             // fetch/create wallet
-            let wallet = await this.walletRepository.findWallet(user.uuid,);
-            if (!wallet) {
-                wallet = await this.walletRepository.createWallet({ user_uuid: user.uuid, balance: 0, });
-            }
+            const wallet = await this.walletRepository.upsertWallet(user.uuid);
+            // if (!wallet) {
+            //     wallet = await this.walletRepository.createWallet({ user_uuid: user.uuid, balance: 0 });
+            // }
 
             // check order
             const order = await this.orderRepository.findByUserUuidAndOrderUuid(user.uuid, order_uuid,);

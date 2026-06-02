@@ -33,4 +33,21 @@ export class WalletRepository extends Repository<WalletEntity> {
             { balance },
         );
     }
+
+    async upsertWallet(user_uuid: string) {
+        await this.upsert(
+            {
+                user_uuid,
+                balance: 0,
+            },
+            ["user_uuid"],
+        );
+
+        const wallet = await this.findWallet(user_uuid);
+        if (!wallet) {
+            throw new Error("Wallet not found after upsert");
+        }
+
+        return wallet;
+    }
 }
