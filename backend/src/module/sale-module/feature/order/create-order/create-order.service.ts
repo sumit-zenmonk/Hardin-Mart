@@ -6,6 +6,7 @@ import { OrderRepository } from "src/module/sale-module/infrastructure/repositor
 import { OrderItemRepository } from "src/module/sale-module/infrastructure/repository/order.item.repository";
 import { OutboxRepository } from "src/module/sale-module/infrastructure/repository/outbox.repository";
 import { Transactional } from "typeorm-transactional";
+import Razorpay from 'razorpay';
 
 @Injectable()
 export class CreateOrderService {
@@ -31,6 +32,15 @@ export class CreateOrderService {
                 })
             )
         );
+
+        const razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET,
+        });
+        const razorOrder = await razorpay.orders.create({
+            amount: 1000, // Amount in paise
+            currency: "INR",
+        });
 
         order.items = orderItems;
 
@@ -68,6 +78,7 @@ export class CreateOrderService {
         });
 
         return {
+            razorOrder: razorOrder,
             data: order
         };
     }

@@ -17,6 +17,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
 import { payOrder } from "@/redux/feature/wallet/wallet.action";
+import Razorpay from 'razorpay';
 
 export default function OrderPage() {
     const dispatch = useAppDispatch();
@@ -59,10 +60,43 @@ export default function OrderPage() {
 
     const handlePay = async (order_uuid: string) => {
         try {
-            await dispatch(payOrder({ order_uuid })).unwrap();
+            const razorOrder = {
+                "amount": 1000,
+                "amount_due": 1000,
+                "amount_paid": 0,
+                "attempts": 0,
+                "created_at": 1780483332,
+                "currency": "INR",
+                "entity": "order",
+                "id": "order_Sx84kSstK69jrz",
+                "notes": [],
+                "offer_id": null,
+                "receipt": null,
+                "status": "created"
+            }
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+                amount: razorOrder.amount,
+                currency: razorOrder.currency,
+                order_id: razorOrder.id, // Order ID from backend
+                handler: (response: any) => {
+                    console.log(response); // Payment details
+                    // personal webhook
+                    // Step 3: Send payment details to backend for verification
+                    verifyPayment(order_uuid);
+                },
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
         } catch (err: any) {
             enqueueSnackbar(err, { variant: "warning" });
         }
+    };
+
+    // 
+    const verifyPayment = async (order_uuid: string) => {
+        await dispatch(payOrder({ order_uuid })).unwrap();
     };
 
     return (
