@@ -15,6 +15,7 @@ export class GetRazorPayLinkService {
         const razorOrder = await razorpay.orders.create({
             amount: body.total_price * 100, // Amount in paise
             currency: "INR",
+            receipt: `receipt_${body.order_uuid}`,
         });
 
         return {

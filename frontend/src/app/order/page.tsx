@@ -61,12 +61,12 @@ export default function OrderPage() {
     const handlePay = async (order_uuid: string) => {
         try {
             const billingOrder = billingOrders ? billingOrders.find((item) => item.uuid === order_uuid) : null;
-            const razorOrder = await dispatch(getRazorPayLink({ total_price: Number(billingOrder?.total_price) })).unwrap();
+            const razorOrder = await dispatch(getRazorPayLink({ total_price: Number(billingOrder?.total_price), order_uuid: order_uuid })).unwrap();
             const options = {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-                amount: razorOrder.amount,
-                currency: razorOrder.currency,
-                order_id: razorOrder.id, // Order ID from backend
+                amount: razorOrder.data.amount,
+                currency: razorOrder.data.currency,
+                order_id: razorOrder.data.id, // Order ID from backend
                 handler: (response: any) => {
                     console.log(response); // Payment details
                     // Send payment details to backend for verification

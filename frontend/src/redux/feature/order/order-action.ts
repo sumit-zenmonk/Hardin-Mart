@@ -156,7 +156,7 @@ export const createOrder = createAsyncThunk<
 
 export const getRazorPayLink = createAsyncThunk<
     any,
-    { total_price: number },
+    { total_price: number, order_uuid: string },
     { state: RootState }
 >(
     "razor/pay/link",
