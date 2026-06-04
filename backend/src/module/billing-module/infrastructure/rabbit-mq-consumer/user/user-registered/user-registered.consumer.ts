@@ -3,7 +3,7 @@ import { RabbitMQService } from 'src/module/common/infrastruture/rabbit-mq/rabbi
 import { ExchangeNameEnum, ExchangeTypeEnum, QueueEnum, RoutingKeyEnum } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum';
 import { RabbitMQConsumerMessage, UserRegisteredMQEventPayload } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type';
 import { InboxRepository } from '../../../repository/inbox.repository';
-import { UserRegisterService } from 'src/module/billing-module/feature/user/user-register/user-register.service';
+import { UserRegisterService } from 'src/module/billing-module/feature/user/user-register/user-register.handler';
 
 @Injectable()
 export class UserRegisteredConsumer implements OnModuleInit {

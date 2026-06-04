@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query, Req, UseGuards } from "@nestjs/common";
-import { GetProductListingService } from "./get-product-listing.handler";
+import { GetProductListingService } from "./get-product-listing.service";
 
 @Controller()
 export class GetProductListingController {
@@ -9,7 +9,7 @@ export class GetProductListingController {
     async getProductListing(@Query('offset') offset?: number, @Query('limit') limit?: number) {
         const curr_limit = limit ?? Number(process.env.page_limit) ?? 10;
         const curr_offset = offset ?? Number(process.env.page_offset) ?? 0;
-        const { data, total } = await this.getProductListingService.handle(offset, limit);
+        const { data, total } = await this.getProductListingService.getProductListingService(offset, limit);
 
         return {
             data: data,

@@ -23,7 +23,7 @@ import * as BillingInboxRepo from 'src/module/billing-module/infrastructure/repo
 import * as BillingOrderRepo from 'src/module/billing-module/infrastructure/repository/order.repository';
 import * as BillingWalletRepo from 'src/module/billing-module/infrastructure/repository/wallet.repository';
 import * as BillingWalletHistoryRepo from 'src/module/billing-module/infrastructure/repository/wallet.history.repository';
-import * as BillingUserRegisterService from 'src/module/billing-module/feature/user/user-register/user-register.service';
+import * as BillingUserRegisterService from 'src/module/billing-module/feature/user/user-register/user-register.handler';
 import * as BillingOrderCreatedService from 'src/module/billing-module/feature/order/order-created/order-created.handler';
 import * as BillingOrderRefundService from 'src/module/billing-module/feature/order/order-refund/order-refund.handler';
 import * as BillingUserRegisteredConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';

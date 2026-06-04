@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { GetProductListingController } from "./get-product-listing.controller";
-import { GetProductListingService } from "./get-product-listing.handler";
+import { GetProductListingService } from "./get-product-listing.service";
 import { ProductRepository } from "src/module/catalog-module/infrastructure/repository/product.repository";
 
 @Module({
