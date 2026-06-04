@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ProductRepository } from "src/module/catalog-module/infrastructure/repository/product.repository";
+import { ProductRepository } from "src/module/shipment-module/infrastructure/repository/product.repository";
 
 @Injectable()
 export class GetMaterializedViewProductListingService {
