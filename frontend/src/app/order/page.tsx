@@ -22,7 +22,7 @@ import Razorpay from 'razorpay';
 export default function OrderPage() {
     const dispatch = useAppDispatch();
     const { saleOrders, billingOrders, shipmentOrders, loading } = useAppSelector((state: RootState) => state.orderReducer);
-    const { catalogProducts, saleProducts } = useAppSelector((state: RootState) => state.productReducer);
+    const { products, catalogProducts, saleProducts } = useAppSelector((state: RootState) => state.productReducer);
     const [limit] = useState(Number(process.env.NEXT_PUBLIC_PAGE_LIMIT) || 10);
     const [offset, setOffset] = useState(Number(process.env.NEXT_PUBLIC_PAGE_OFFSET) || 0);
     const [hasMore, setHasMore] = useState(true);
@@ -69,8 +69,7 @@ export default function OrderPage() {
                 order_id: razorOrder.id, // Order ID from backend
                 handler: (response: any) => {
                     console.log(response); // Payment details
-                    // personal webhook
-                    // Step 3: Send payment details to backend for verification
+                    // Send payment details to backend for verification
                     verifyPayment(order_uuid);
                 },
             };
@@ -82,9 +81,13 @@ export default function OrderPage() {
         }
     };
 
-    // 
+    // local webhook triggered
     const verifyPayment = async (order_uuid: string) => {
-        await dispatch(payOrder({ order_uuid })).unwrap();
+        try {
+            await dispatch(payOrder({ order_uuid })).unwrap();
+        } catch (err: any) {
+            enqueueSnackbar(err, { variant: "warning" });
+        }
     };
 
     return (
@@ -168,7 +171,7 @@ export default function OrderPage() {
                                         <Box className={styles.slidercomp}>
                                             <Slider {...sliderSettings}>
                                                 {order.items.map((item: OrderItem) => {
-                                                    const product = catalogProducts.find((p) => p.uuid === item.product_uuid);
+                                                    const product = products.find((p) => p.uuid === item.product_uuid) || catalogProducts.find((p) => p.uuid === item.product_uuid);
                                                     const saleProduct = saleProducts.find((p) => p.uuid === item.product_uuid);
 
                                                     return (
@@ -193,7 +196,7 @@ export default function OrderPage() {
                                                                 </Typography>
 
                                                                 <Typography variant="body2">
-                                                                    Price: ${saleProduct?.price || 0}
+                                                                    Price: ${product?.price || saleProduct?.price || 0}
                                                                 </Typography>
                                                             </Box>
                                                         </Card>
