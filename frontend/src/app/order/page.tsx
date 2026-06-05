@@ -158,7 +158,7 @@ export default function OrderPage() {
                                             Total Price: {billingOrder?.total_price}
                                         </Typography>
 
-                                        {/* {
+                                        {
                                             (
                                                 billingOrder?.payment_status == OrderPaymentStatusEnum.PENDING ||
                                                 billingOrder?.payment_status == OrderPaymentStatusEnum.FAILED
@@ -166,7 +166,7 @@ export default function OrderPage() {
                                             <Button onClick={() => handlePay(order.uuid)}>
                                                 Pay
                                             </Button>
-                                        } */}
+                                        }
 
                                         <Box className={styles.slidercomp}>
                                             <Slider {...sliderSettings}>

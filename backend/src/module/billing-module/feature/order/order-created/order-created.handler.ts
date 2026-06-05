@@ -3,13 +3,16 @@ import { OrderRepository } from "src/module/billing-module/infrastructure/reposi
 import { OutboxRepository } from "src/module/billing-module/infrastructure/repository/outbox.repository";
 import { ExchangeNameEnum, RoutingKeyEnum } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum";
 import type { OrderCreatedMQEventPayload } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type";
-import { Transactional } from "typeorm-transactional";
+import { SocketEventNameEnum } from "src/module/common/infrastruture/socket/socket.enum";
+import { SocketService } from "src/module/common/infrastruture/socket/socket.service";
+import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 
 @Injectable()
 export class OrderCreatedService {
     constructor(
         private readonly orderRepository: OrderRepository,
         private readonly outboxRepository: OutboxRepository,
+        private readonly socketService: SocketService,
     ) { }
 
     @Transactional({
@@ -17,7 +20,7 @@ export class OrderCreatedService {
     })
     async handle(order: OrderCreatedMQEventPayload) {
         try {
-            await this.orderRepository.createOrder(
+            const newOrder = await this.orderRepository.createOrder(
                 {
                     user_uuid: order.user_uuid,
                     uuid: order.order_uuid,
@@ -37,6 +40,15 @@ export class OrderCreatedService {
                 },
             });
 
+            runOnTransactionCommit(async () => {
+                await this.socketService.emitToUser(
+                    order.user_uuid,
+                    SocketEventNameEnum.BILLING_ORDER_CREATED,
+                    {
+                        order: newOrder
+                    },
+                );
+            })
             return;
         } catch (error: any) {
             throw error;
