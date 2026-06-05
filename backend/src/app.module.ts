@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { DataSourceOptions } from 'typeorm';
 
 // Common Module
 import { BcryptService } from './module/common/infrastruture/services/bcrypt.service';
@@ -71,7 +72,7 @@ import * as ShipmentCronModule from './module/shipment-module/infrastructure/cro
       dataSourceFactory: async (options) =>
         createTransactionalDataSource(
           process.env.DB_POSTGRES_USER_SCHEMA || 'user_schema',
-          options,
+          options as DataSourceOptions,
         ),
     }),
     UserModule,
@@ -88,7 +89,7 @@ import * as ShipmentCronModule from './module/shipment-module/infrastructure/cro
       dataSourceFactory: async (options) =>
         createTransactionalDataSource(
           process.env.DB_POSTGRES_CATALOG_SCHEMA || 'catalog_schema',
-          options,
+          options as DataSourceOptions,
         ),
     }),
     ProductProductModule.ProductModule,
@@ -104,7 +105,7 @@ import * as ShipmentCronModule from './module/shipment-module/infrastructure/cro
       dataSourceFactory: async (options) =>
         createTransactionalDataSource(
           process.env.DB_POSTGRES_SALE_SCHEMA || 'sale_schema',
-          options,
+          options as DataSourceOptions,
         ),
     }),
     SaleOrderModule.OrderModule,
@@ -122,7 +123,7 @@ import * as ShipmentCronModule from './module/shipment-module/infrastructure/cro
       dataSourceFactory: async (options) =>
         createTransactionalDataSource(
           process.env.DB_POSTGRES_BILLING_SCHEMA || 'billing_schema',
-          options,
+          options as DataSourceOptions,
         ),
     }),
     WalletModule,
@@ -141,7 +142,7 @@ import * as ShipmentCronModule from './module/shipment-module/infrastructure/cro
       dataSourceFactory: async (options) =>
         createTransactionalDataSource(
           process.env.DB_POSTGRES_SHIPMENT_SCHEMA || 'shipment_schema',
-          options,
+          options as DataSourceOptions,
         ),
     }),
     UserAddressModule,
