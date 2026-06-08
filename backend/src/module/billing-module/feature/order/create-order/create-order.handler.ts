@@ -30,6 +30,16 @@ export class CreateOrderService {
                 }
             );
 
+            // create outbox entry
+            await this.outboxRepository.createOutboxEntry({
+                exchange_name: ExchangeNameEnum.ORDER_EXCHANGE,
+                routing_key: RoutingKeyEnum.ORDER_PLACED,
+                message_payload: {
+                    order_uuid: order.order_uuid,
+                    user_uuid: order.user_uuid,
+                },
+            });
+
             runOnTransactionCommit(async () => {
                 await this.socketService.emitToUser(
                     order.user_uuid,

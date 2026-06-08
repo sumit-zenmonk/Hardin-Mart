@@ -154,36 +154,6 @@ export const createOrder = createAsyncThunk<
     }
 );
 
-export const placeOrder = createAsyncThunk<
-    void,
-    { order_uuid: string },
-    { state: RootState }
->(
-    "order/placeOrder",
-    async (payload, { getState, rejectWithValue }) => {
-        try {
-            const token = getState().authReducer.token || "";
-
-            const res = await fetch(`${API_URL}/api/v1/sale/order/${payload.order_uuid}/place`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: token,
-                },
-            });
-
-            const result = await res.json();
-            if (!res.ok) {
-                throw new Error(result.message);
-            }
-
-            return;
-        } catch (error: any) {
-            return rejectWithValue(error.message);
-        }
-    }
-);
-
 export const getRazorPayLink = createAsyncThunk<
     any,
     { total_price: number, order_uuid: string },

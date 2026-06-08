@@ -241,7 +241,7 @@ export default function CartPage() {
                                     color="primary"
                                     onClick={() => setOpenUserAddressModal(true)}
                                 >
-                                    Create Order
+                                    Place Order
                                 </Button>
                             </>
                         )}

@@ -5,7 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Box, Button, Card, CardContent, CircularProgress, Container, Typography } from "@mui/material";
 import { RootState, } from "@/redux/store";
 import styles from "./order.module.css";
-import { getSaleOrders, getBillingOrders, getShipmentOrders, getRazorPayLink, placeOrder } from "@/redux/feature/order/order-action";
+import { getSaleOrders, getBillingOrders, getShipmentOrders, getRazorPayLink } from "@/redux/feature/order/order-action";
 import { SaleOrder, OrderItem } from "@/redux/feature/order/order-type";
 import { enqueueSnackbar } from "notistack";
 import Image from "next/image";
@@ -48,7 +48,6 @@ export default function OrderPage() {
     };
 
     const orderSteps = [
-        OrderStatusEnum.PENDING,
         OrderStatusEnum.PLACED,
         OrderStatusEnum.BILLED,
         OrderStatusEnum.READY_TO_SHIP,
@@ -91,14 +90,6 @@ export default function OrderPage() {
         }
     };
 
-    const handlePlaceOrder = async (order_uuid: string) => {
-        try {
-            await dispatch(placeOrder({ order_uuid })).unwrap();
-        } catch (err: any) {
-            enqueueSnackbar(err, { variant: "warning" });
-        }
-    };
-
     return (
         <Container maxWidth="xl" className={styles.container}>
             <Box className={styles.header}>
@@ -129,7 +120,7 @@ export default function OrderPage() {
                             return (
                                 <Card key={order.uuid} className={styles.orderCard}>
 
-                                    <Stepper activeStep={getActiveStep((shipmentOrder?.order_status || OrderStatusEnum.PENDING) as OrderStatusEnum)} alternativeLabel className={styles.stepper}>
+                                    <Stepper activeStep={getActiveStep((shipmentOrder?.order_status || OrderStatusEnum.PLACED) as OrderStatusEnum)} alternativeLabel className={styles.stepper}>
                                         {orderSteps.map((step) => (
                                             <Step
                                                 key={step}
@@ -140,7 +131,7 @@ export default function OrderPage() {
                                                 }
                                             >
                                                 <StepLabel
-                                                    error={billingOrder?.payment_status === OrderPaymentStatusEnum.FAILED && shipmentOrder?.order_status === step}
+                                                    // error={billingOrder?.payment_status === OrderPaymentStatusEnum.REFUND && order.returned_from_status === step}
                                                     sx={{
                                                         "& .MuiStepLabel-label": {
                                                             textTransform: "capitalize",
@@ -176,16 +167,6 @@ export default function OrderPage() {
                                                 Pay
                                             </Button>
                                         } */}
-
-                                        {
-                                            (
-                                                // shipmentOrder?.order_status == OrderStatusEnum.PENDING ||
-                                                billingOrder?.payment_status == OrderPaymentStatusEnum.PENDING
-                                            ) &&
-                                            <Button onClick={() => handlePlaceOrder(order.uuid)}>
-                                                Place Order
-                                            </Button>
-                                        }
 
                                         <Box className={styles.slidercomp}>
                                             <Slider {...sliderSettings}>
@@ -229,14 +210,14 @@ export default function OrderPage() {
                                                 variant="body2"
                                                 sx={{ mt: 1, textAlign: "center" }}
                                             >
-                                                Payment Status: {billingOrder?.payment_status ? billingOrder?.payment_status.toUpperCase() : OrderPaymentStatusEnum.PENDING.toUpperCase()}
+                                                Payment Status: {billingOrder?.payment_status.toUpperCase() || OrderPaymentStatusEnum.PENDING.toUpperCase()}
                                             </Typography>
 
                                             <Typography
                                                 variant="body2"
                                                 sx={{ mt: 1, textAlign: "center" }}
                                             >
-                                                Order Status: {shipmentOrder?.order_status ? shipmentOrder?.order_status.toUpperCase() : OrderStatusEnum.PENDING.toUpperCase()}
+                                                Order Status: {shipmentOrder?.order_status.toUpperCase() || OrderStatusEnum.PLACED.toUpperCase()}
                                             </Typography>
                                         </Box>
                                     </CardContent>
