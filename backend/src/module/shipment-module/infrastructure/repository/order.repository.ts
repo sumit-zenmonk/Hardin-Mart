@@ -4,6 +4,7 @@ import { InjectDataSource } from "@nestjs/typeorm";
 import { OrderEntity } from "../../domain/order/order.entity";
 import { UserEntity } from "../../domain/user/user.entity";
 import { OrderStatusEnum } from "../../domain/order/order.enum";
+import { OrderListingViewEntity } from "../../domain/order/order-listing.view.entity";
 
 @Injectable()
 export class OrderRepository extends Repository<OrderEntity> {
@@ -58,5 +59,24 @@ export class OrderRepository extends Repository<OrderEntity> {
             }
         });
         return user;
+    }
+
+    async getOrderListingFromMaterializedView(offset?: number, limit?: number) {
+        const shipmentSchema = process.env.DB_POSTGRES_SHIPMENT_SCHEMA || 'shipment_schema';
+        const orderView = process.env.DB_POSTGRES_ORDER_VIEW || "order_listing_mv";
+        const currOffset = Number(offset) || Number(process.env.page_offset) || 0;
+        const currLimit = Number(limit) || Number(process.env.page_limit) || 10;
+
+        await this.dataSource.query(`REFRESH MATERIALIZED VIEW CONCURRENTLY ${shipmentSchema}.${orderView}`);
+
+        const [data, total] = await this.dataSource.getRepository(OrderListingViewEntity).findAndCount({
+            order: {
+                created_at: 'DESC'
+            },
+            skip: currOffset,
+            take: currLimit
+        });
+
+        return { data, total };
     }
 }
