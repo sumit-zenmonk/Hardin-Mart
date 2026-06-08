@@ -27,7 +27,7 @@ import * as BillingWalletHistoryRepo from 'src/module/billing-module/infrastruct
 import * as BillingUserRegisterService from 'src/module/billing-module/feature/user/user-register/user-register.handler';
 import * as BillingPayOrderService from 'src/module/billing-module/feature/wallet/pay-order/pay-order.handler';
 import * as BillingOrderRefundService from 'src/module/billing-module/feature/order/order-refund/order-refund.handler';
-import * as BillingOrderCreatedPayConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-created-pay/order-created-pay.consumer';
+import * as BillingOrderPlacedConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-placed/order-placed.consumer';
 import * as BillingUserRegisteredConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
 import * as BillingOrderRefundConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-refund/order-refund.consumer';
 
@@ -40,8 +40,10 @@ import * as ShipmentProductRepo from 'src/module/shipment-module/infrastructure/
 import * as ShipmentOutboxRepo from 'src/module/shipment-module/infrastructure/repository/outbox.repository';
 import * as ShipmentUserRegisterService from 'src/module/shipment-module/feature/user/user-register/user-register.handler';
 import * as ShipmentOrderPaidService from 'src/module/shipment-module/feature/order/order-paid/order-paid.handler';
+import * as ShipmentOrderPlacedService from 'src/module/shipment-module/feature/order/order-placed/order-placed.handler';
 import * as ShipmentUserRegisteredConsumer from 'src/module/shipment-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
 import * as ShipmentOrderPaidConsumer from 'src/module/shipment-module/infrastructure/rabbit-mq-consumer/order/order-paid/order-paid.consumer';
+import * as ShipmentOrderPlacedConsumer from 'src/module/shipment-module/infrastructure/rabbit-mq-consumer/order/order-placed/order-placed.consumer';
 
 @Global()
 @Module({
@@ -76,7 +78,7 @@ import * as ShipmentOrderPaidConsumer from 'src/module/shipment-module/infrastru
         BillingPayOrderService.PayOrderService,
         BillingOrderRefundService.OrderRefundService,
         BillingUserRegisteredConsumer.UserRegisteredConsumer,
-        BillingOrderCreatedPayConsumer.OrderCreatedPayConsumer,
+        BillingOrderPlacedConsumer.OrderPlacedConsumer,
         BillingOrderRefundConsumer.OrderRefundConsumer,
 
         // Shipment Module
@@ -88,8 +90,10 @@ import * as ShipmentOrderPaidConsumer from 'src/module/shipment-module/infrastru
         ShipmentInboxRepo.InboxRepository,
         ShipmentUserRegisterService.UserRegisterService,
         ShipmentOrderPaidService.OrderPaidService,
+        ShipmentOrderPlacedService.OrderPlacedService,
         ShipmentUserRegisteredConsumer.UserRegisteredConsumer,
         ShipmentOrderPaidConsumer.OrderPaidConsumer,
+        ShipmentOrderPlacedConsumer.OrderPlacedConsumer,
     ],
     exports: [RabbitMQService],
 })
