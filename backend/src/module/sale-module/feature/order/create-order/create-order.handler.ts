@@ -55,38 +55,7 @@ export class CreateOrderService {
             })),
             created_at: order.created_at,
         }
-        // not publish direct to mq-queue
-        // await this.rabbitMQService.publishToExchange(
-        //     ExchangeNameEnum.ORDER_EXCHANGE,${API_URL}
-        //     RoutingKeyEnum.ORDER_CREATED,user.token
-        //     {
-        //         order_uuid: order.uuid,
-        //         user_uuid: user.uuid,
-        //         total_price,
-        //         created_at: new Date(),
-        //     }
-        // );
 
-        // make entry of publish exchange
-        // await this.outboxRepository.createOutboxEntry({
-        //     exchange_name: ExchangeNameEnum.ORDER_EXCHANGE,
-        //     routing_key: RoutingKeyEnum.ORDER_CREATED,
-        //     message_payload: {
-        //         order_id: order.id,
-        //         order_uuid: order.uuid,
-        //         user_uuid: user.uuid,
-        //         total_price: body.total_price,
-        //         address_uuid: body.address_uuid,
-        //         items: items.map((item, index) => ({
-        //             uuid: orderItems[index].uuid,
-        //             id: orderItems[index].id,
-        //             product_uuid: item.product_uuid,
-        //             quantity: item.quantity,
-        //             created_at: orderItems[index].created_at,
-        //         })),
-        //         created_at: order.created_at,
-        //     },
-        // });
         const API_URL = process.env.BACKEND_URL;
         const billingUrl = `${API_URL}/api/v1/billing/order`;
         const shipmentUrl = `${API_URL}/api/v1/shipment/order`;
