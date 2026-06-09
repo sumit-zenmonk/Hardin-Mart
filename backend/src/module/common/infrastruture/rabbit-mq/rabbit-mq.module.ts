@@ -9,14 +9,14 @@ import * as UserUserRepository from 'src/module/user-module/infrastructure/repos
 import * as CatalogUserRepository from 'src/module/catalog-module/infrastructure/repository/user.repository';
 import * as CatalogInboxRepository from 'src/module/catalog-module/infrastructure/repository/inbox.repository';
 import * as CatalogUserRegisteredConsumer from 'src/module/catalog-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
-import * as CatalogUserRegisterHandler from 'src/module/catalog-module/feature/user/user-register/user-register.handler';
+import * as CatalogUserRegisterService from 'src/module/catalog-module/feature/user/user-register/user-register.handler';
 
 // Sale Module
 import * as SaleUserRepository from 'src/module/sale-module/infrastructure/repository/user.repository';
 import * as SaleInboxRepository from 'src/module/sale-module/infrastructure/repository/inbox.repository';
 import * as SaleOrderRepository from 'src/module/sale-module/infrastructure/repository/order.repository';
 import * as SaleUserRegisteredConsumer from 'src/module/sale-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
-import * as SaleUserRegisterHandler from 'src/module/sale-module/feature/user/user-register/user-register.handler';
+import * as SaleUserRegisterService from 'src/module/sale-module/feature/user/user-register/user-register.handler';
 import * as SaleOrderBilledService from 'src/module/sale-module/feature/order/order-billed/order-billed.handler';
 import * as SaleOrderRefundService from 'src/module/sale-module/feature/order/order-refund/order-refund.handler';
 import * as SaleOrderPaymentFailedService from 'src/module/sale-module/feature/order/order-payment-failed/order-payment-failed.handler';
@@ -68,7 +68,7 @@ import * as ShipmentOrderPlacedConsumer from 'src/module/shipment-module/infrast
         CatalogUserRepository.UserRepository,
         CatalogInboxRepository.InboxRepository,
         CatalogUserRegisteredConsumer.UserRegisteredConsumer,
-        CatalogUserRegisterHandler.UserRegisterService,
+        CatalogUserRegisterService.UserRegisterService,
 
         // Sale Module
         SaleUserRepository.UserRepository,
@@ -77,7 +77,7 @@ import * as ShipmentOrderPlacedConsumer from 'src/module/shipment-module/infrast
         SaleUserRegisteredConsumer.UserRegisteredConsumer,
         SaleOrderShippingLabelCreatedService.OrderShippingLabelCreatedService,
         SaleOrderBilledService.OrderBilledService,
-        SaleUserRegisterHandler.UserRegisterService,
+        SaleUserRegisterService.UserRegisterService,
         SaleOrderPaymentFailedService.OrderPaymentFailedService,
         SaleOrderRefundService.OrderRefundService,
         SaleOrderBilledConsumer.OrderBilledConsumer,
