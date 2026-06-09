@@ -38,12 +38,17 @@ export interface OrderCreatedMQEventPayload {
     created_at: Date;
 }
 
-export interface OrderPaidMQEventPayload {
+export interface OrderBilledMQEventPayload {
     order_uuid: string;
     user_uuid: string;
 }
 
 export interface OrderPlacedMQEventPayload {
+    order_uuid: string;
+    user_uuid: string;
+}
+
+export interface OrderShippingLabelCreatedMQEventPayload {
     order_uuid: string;
     user_uuid: string;
 }

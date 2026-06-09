@@ -1,27 +1,27 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { RabbitMQService } from 'src/module/common/infrastruture/rabbit-mq/rabbit-mq.service';
 import { ExchangeNameEnum, ExchangeTypeEnum, QueueEnum, RoutingKeyEnum } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum';
-import { RabbitMQConsumerMessage, OrderPaidMQEventPayload } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type';
+import { RabbitMQConsumerMessage, OrderShippingLabelCreatedMQEventPayload } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type';
 import { InboxRepository } from '../../../repository/inbox.repository';
-import { OrderPaidService } from 'src/module/shipment-module/feature/order/order-paid/order-paid.handler';
+import { OrderShippingLabelCreatedService } from 'src/module/sale-module/feature/order/order-shipping-label-created/order-shipping-label-created.handler';
 
 @Injectable()
-export class OrderPaidConsumer implements OnModuleInit {
-    private readonly logger = new Logger(OrderPaidConsumer.name);
+export class OrderShippingLabelCreatedConsumer implements OnModuleInit {
+    private readonly logger = new Logger(OrderShippingLabelCreatedConsumer.name);
 
     constructor(
         private readonly rabbitMQService: RabbitMQService,
         private readonly inboxRepository: InboxRepository,
-        private readonly orderPaidService: OrderPaidService,
+        private readonly orderShippingLabelCreatedService: OrderShippingLabelCreatedService,
     ) { }
 
     async onModuleInit() {
-        await this.rabbitMQService.consumeMessages<RabbitMQConsumerMessage<OrderPaidMQEventPayload>>(
-            QueueEnum.SHIPMENT_ORDER_BLLIED_QUEUE,
+        await this.rabbitMQService.consumeMessages<RabbitMQConsumerMessage<OrderShippingLabelCreatedMQEventPayload>>(
+            QueueEnum.SALE_ORDER_SHIPPING_LABEL_CREATED_QUEUE,
             async (data) => {
                 const { outbox_uuid, payload } = data;
 
-                this.logger.log(`Processing order paid: ${payload.order_uuid} \n ${JSON.stringify(payload)}`);
+                this.logger.log(`Processing shipping label created: ${payload.order_uuid} \n ${JSON.stringify(payload)}`);
 
                 const alreadyProcessed = await this.inboxRepository.findByOutboxUuid(outbox_uuid);
                 if (alreadyProcessed) {
@@ -29,7 +29,7 @@ export class OrderPaidConsumer implements OnModuleInit {
                     return;
                 }
 
-                await this.orderPaidService.handle(payload);
+                await this.orderShippingLabelCreatedService.handle(payload);
 
                 await this.inboxRepository.createEntry({ outbox_uuid });
             },

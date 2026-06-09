@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { OrderPaymentStatusEnum } from "src/module/billing-module/domain/order/order.enum";
 import type { OrderPlacedMQEventPayload, OrderRefundMQEventPayload } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type";
-import { OrderStatusEnum } from "src/module/shipment-module/domain/order/order.enum";
+import { OrderStatusEnum } from "src/module/sale-module/domain/order/order.enum";
 import { OrderRepository } from "src/module/shipment-module/infrastructure/repository/order.repository";
 import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 
@@ -21,7 +21,7 @@ export class OrderPlacedService {
             return;
         }
 
-        await this.orderRepository.updateOrderStatus(order.order_uuid, OrderStatusEnum.PLACED);
+        await this.orderRepository.updateOrder(order.order_uuid, { is_placed: true });
 
         return;
     }

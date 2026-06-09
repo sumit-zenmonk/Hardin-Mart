@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 import { UserEntity } from "src/module/user-module/domain/user/user.entity";
-import { PayOrderDto } from "./pay-order.dto";
+import { OrderPlacedDto } from "./order-placed.dto";
 import { WalletRepository } from "src/module/billing-module/infrastructure/repository/wallet.repository";
 import { WalletHistoryRepository } from "src/module/billing-module/infrastructure/repository/wallet.history.repository";
 import { OrderRepository } from "src/module/billing-module/infrastructure/repository/order.repository";
@@ -11,7 +11,7 @@ import { WalletHistoryTypeEnum } from "src/module/billing-module/domain/wallet-h
 import { ExchangeNameEnum, RoutingKeyEnum, } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum";
 
 @Injectable()
-export class PayOrderService {
+export class OrderPlacedService {
     constructor(
         private readonly walletRepository: WalletRepository,
         private readonly walletHistoryRepository: WalletHistoryRepository,
@@ -22,7 +22,7 @@ export class PayOrderService {
     @Transactional({
         connectionName: process.env.DB_POSTGRES_BILLING_SCHEMA || "billing_schema",
     })
-    async handle(user_uuid: string, body: PayOrderDto,) {
+    async handle(user_uuid: string, body: OrderPlacedDto) {
         const { order_uuid } = body;
 
         try {

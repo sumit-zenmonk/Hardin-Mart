@@ -3,7 +3,7 @@ import { RabbitMQService } from 'src/module/common/infrastruture/rabbit-mq/rabbi
 import { ExchangeNameEnum, ExchangeTypeEnum, QueueEnum, RoutingKeyEnum } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum';
 import { RabbitMQConsumerMessage, OrderPlacedMQEventPayload } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type';
 import { InboxRepository } from '../../../repository/inbox.repository';
-import { PayOrderService } from 'src/module/billing-module/feature/wallet/pay-order/pay-order.handler';
+import { OrderPlacedService } from 'src/module/billing-module/feature/order/order-placed/order-placed.handler';
 
 @Injectable()
 export class OrderPlacedConsumer implements OnModuleInit {
@@ -12,7 +12,7 @@ export class OrderPlacedConsumer implements OnModuleInit {
     constructor(
         private readonly rabbitMQService: RabbitMQService,
         private readonly inboxRepository: InboxRepository,
-        private readonly payOrderService: PayOrderService,
+        private readonly orderPlacedService: OrderPlacedService,
     ) { }
 
     async onModuleInit() {
@@ -21,7 +21,7 @@ export class OrderPlacedConsumer implements OnModuleInit {
             async (data) => {
                 const { outbox_uuid, payload } = data;
 
-                this.logger.log(`Processing order paying: ${payload.order_uuid} \n ${JSON.stringify(payload)}`);
+                this.logger.log(`Processing order placed: ${payload.order_uuid} \n ${JSON.stringify(payload)}`);
 
                 const alreadyProcessed = await this.inboxRepository.findByOutboxUuid(outbox_uuid);
                 if (alreadyProcessed) {
@@ -29,7 +29,7 @@ export class OrderPlacedConsumer implements OnModuleInit {
                     return;
                 }
 
-                await this.payOrderService.handle(payload.user_uuid, { order_uuid: payload.order_uuid });
+                await this.orderPlacedService.handle(payload.user_uuid, { order_uuid: payload.order_uuid });
 
                 await this.inboxRepository.createEntry({ outbox_uuid });
             },
