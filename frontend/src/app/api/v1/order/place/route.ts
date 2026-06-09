@@ -47,7 +47,7 @@ export async function PATCH(request: Request) {
         }
 
         // 3. Complete the Promise.all array for concurrent billing/other requests
-        const [api1Res, api2Res] = await Promise.all([
+        const [api1Res, api2Res] = await Promise.allSettled([
             fetch(`${BACKEND_URL}/api/v1/billing/order`, {
                 method: "POST",
                 headers: {
