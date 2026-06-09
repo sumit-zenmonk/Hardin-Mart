@@ -28,7 +28,7 @@ export class OrderListingMaterializedViewMigration1778505600006 implements Migra
                         CREATE MATERIALIZED VIEW IF NOT EXISTS ${shipmentSchema}.${orderView} AS
                         SELECT
                             sale_order.uuid,
-                            sale_order.user_uuid,
+                            sale_order.customer_uuid,
                             sale_order.total_price,
                             shipment_order.address_uuid,
                             sale_order.order_status,

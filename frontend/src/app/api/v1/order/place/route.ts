@@ -24,7 +24,7 @@ export async function PATCH(request: Request) {
             body: JSON.stringify(reqBody),
         });
 
-       const response = await result.json();
+        const response = await result.json();
         if (!result.ok) {
             throw new Error(`Sale order creation failed: ${JSON.stringify(result)}`);
         }
@@ -33,7 +33,7 @@ export async function PATCH(request: Request) {
         const payload = {
             order_id: response.data.id,
             order_uuid: response.data.uuid,
-            user_uuid: response.data.user_uuid,
+            customer_uuid: response.data.customer_uuid,
             total_price: response.data.total_price,
             address_uuid: reqBody.address_uuid,
             items: response.data.items.map((item: any) => ({

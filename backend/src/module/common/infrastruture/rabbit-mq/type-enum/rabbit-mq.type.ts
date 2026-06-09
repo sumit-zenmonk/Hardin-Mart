@@ -25,7 +25,7 @@ export interface UserRegisteredMQEventPayload {
 export interface OrderCreatedMQEventPayload {
     order_id: number;
     order_uuid: string;
-    user_uuid: string;
+    customer_uuid: string;
     total_price: number;
     address_uuid: string;
     items: {
@@ -40,25 +40,25 @@ export interface OrderCreatedMQEventPayload {
 
 export interface OrderBilledMQEventPayload {
     order_uuid: string;
-    user_uuid: string;
+    customer_uuid: string;
 }
 
 export interface OrderPlacedMQEventPayload {
     order_uuid: string;
-    user_uuid: string;
+    customer_uuid: string;
 }
 
 export interface OrderShippingLabelCreatedMQEventPayload {
     order_uuid: string;
-    user_uuid: string;
+    customer_uuid: string;
 }
 export interface OrderPaymentFailedMQEventPayload {
     order_uuid: string;
-    user_uuid: string;
+    customer_uuid: string;
 }
 
 export interface OrderRefundMQEventPayload {
     order_uuid: string;
-    user_uuid: string;
+    customer_uuid: string;
     reason?: string;
 }

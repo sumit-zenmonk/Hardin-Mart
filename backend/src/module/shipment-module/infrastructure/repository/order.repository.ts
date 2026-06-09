@@ -21,7 +21,7 @@ export class OrderRepository extends Repository<OrderEntity> {
 
     async getOrderListing(user: UserEntity, offset?: number, limit?: number) {
         const [data, total] = await this.findAndCount({
-            where: { user_uuid: user.uuid },
+            where: { customer_uuid: user.uuid },
             relations: {
                 address: true,
             },
@@ -44,11 +44,11 @@ export class OrderRepository extends Repository<OrderEntity> {
         )
     }
 
-    async findByUserUuidAndOrderUuid(user_uuid: string, order_uuid: string) {
+    async findByUserUuidAndOrderUuid(customer_uuid: string, order_uuid: string) {
         const user = await this.findOne({
             where: {
                 uuid: order_uuid,
-                user_uuid: user_uuid
+                customer_uuid: customer_uuid
             },
             relations: {
                 user: true,

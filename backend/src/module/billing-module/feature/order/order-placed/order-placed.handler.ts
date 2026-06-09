@@ -22,18 +22,18 @@ export class OrderPlacedService {
     @Transactional({
         connectionName: process.env.DB_POSTGRES_BILLING_SCHEMA || "billing_schema",
     })
-    async handle(user_uuid: string, body: OrderPlacedDto) {
+    async handle(customer_uuid: string, body: OrderPlacedDto) {
         const { order_uuid } = body;
 
         try {
             // fetch/create wallet
-            const wallet = await this.walletRepository.upsertWallet(user_uuid);
+            const wallet = await this.walletRepository.upsertWallet(customer_uuid);
             // if (!wallet) {
-            //     wallet = await this.walletRepository.createWallet({ user_uuid: user_uuid, balance: 0 });
+            //     wallet = await this.walletRepository.createWallet({ customer_uuid: customer_uuid, balance: 0 });
             // }
 
             // check order
-            const order = await this.orderRepository.findByUserUuidAndOrderUuid(user_uuid, order_uuid,);
+            const order = await this.orderRepository.findByUserUuidAndOrderUuid(customer_uuid, order_uuid,);
             if (!order) {
                 throw new BadRequestException("Order not found");
             }
@@ -56,7 +56,7 @@ export class OrderPlacedService {
                     routing_key: RoutingKeyEnum.ORDER_PAYMENT_FAILED,
                     message_payload: {
                         order_uuid,
-                        user_uuid: user_uuid,
+                        customer_uuid: customer_uuid,
                     },
                 });
                 return;
@@ -74,7 +74,7 @@ export class OrderPlacedService {
 
             // create history
             await this.walletHistoryRepository.createHistory({
-                user_uuid: user_uuid,
+                customer_uuid: customer_uuid,
                 order_uuid,
                 amount: order.total_price,
                 type: WalletHistoryTypeEnum.DEBIT,
@@ -87,7 +87,7 @@ export class OrderPlacedService {
                 routing_key: RoutingKeyEnum.ORDER_BILLED,
                 message_payload: {
                     order_uuid,
-                    user_uuid: user_uuid,
+                    customer_uuid: customer_uuid,
                 },
             });
 

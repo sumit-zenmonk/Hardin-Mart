@@ -19,15 +19,15 @@ export class OrderRefundService {
         connectionName: process.env.DB_POSTGRES_BILLING_SCHEMA || 'billing_schema',
     })
     async handle(order: OrderRefundMQEventPayload) {
-        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.user_uuid, order.order_uuid);
+        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.customer_uuid, order.order_uuid);
         if (!orderData || orderData.payment_status === OrderPaymentStatusEnum.REFUND) {
             return;
         }
 
-        let wallet = await this.walletRepository.findWallet(order.user_uuid);
+        let wallet = await this.walletRepository.findWallet(order.customer_uuid);
         if (!wallet) {
             wallet = await this.walletRepository.createWallet({
-                user_uuid: order.user_uuid,
+                customer_uuid: order.customer_uuid,
                 balance: 0
             });
         }
@@ -37,7 +37,7 @@ export class OrderRefundService {
 
         await this.orderRepository.updateOrderPaymentStatus(order.order_uuid, OrderPaymentStatusEnum.REFUND);
         await this.walletHistoryRepository.createHistory({
-            user_uuid: order.user_uuid,
+            customer_uuid: order.customer_uuid,
             order_uuid: order.order_uuid,
             amount: Number(orderData.total_price),
             type: WalletHistoryTypeEnum.REFUND,

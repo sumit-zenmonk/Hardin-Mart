@@ -14,7 +14,7 @@ export class OrderPaymentFailedService {
         connectionName: process.env.DB_POSTGRES_SALE_SCHEMA || 'sale_schema',
     })
     async handle(order: OrderBilledMQEventPayload) {
-        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.user_uuid, order.order_uuid);
+        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.customer_uuid, order.order_uuid);
         if (!orderData) {
             throw new BadRequestException("Order not found");
         }

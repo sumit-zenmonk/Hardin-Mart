@@ -16,7 +16,6 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
-import { payOrder } from "@/redux/feature/wallet/wallet-action";
 import Razorpay from 'razorpay';
 import { clearOrderState } from "@/redux/feature/order/order-slice";
 
@@ -87,7 +86,6 @@ export default function OrderPage() {
     // local webhook triggered
     const verifyPayment = async (order_uuid: string) => {
         try {
-            await dispatch(payOrder({ order_uuid })).unwrap();
         } catch (err: any) {
             enqueueSnackbar(err, { variant: "warning" });
         }

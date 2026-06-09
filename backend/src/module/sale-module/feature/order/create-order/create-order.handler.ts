@@ -25,7 +25,7 @@ export class CreateOrderService {
 
         const order = await this.orderRepository.createOrder(
             {
-                user_uuid: user.uuid,
+                customer_uuid: user.uuid,
                 total_price: body.total_price,
             }
         );
@@ -48,7 +48,7 @@ export class CreateOrderService {
             routing_key: RoutingKeyEnum.ORDER_PLACED,
             message_payload: {
                 order_uuid: order.uuid,
-                user_uuid: order.user_uuid,
+                customer_uuid: order.customer_uuid,
             },
         });
 

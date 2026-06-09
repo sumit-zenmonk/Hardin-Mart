@@ -1,7 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { OrderPaymentStatusEnum } from "src/module/billing-module/domain/order/order.enum";
-import type { OrderPlacedMQEventPayload, OrderRefundMQEventPayload } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type";
-import { OrderStatusEnum } from "src/module/sale-module/domain/order/order.enum";
+import type { OrderPlacedMQEventPayload, } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type";
 import { OrderRepository } from "src/module/shipment-module/infrastructure/repository/order.repository";
 import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 
@@ -15,7 +13,7 @@ export class OrderPlacedService {
         connectionName: process.env.DB_POSTGRES_BILLING_SCHEMA || 'billing_schema',
     })
     async handle(order: OrderPlacedMQEventPayload) {
-        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.user_uuid, order.order_uuid);
+        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.customer_uuid, order.order_uuid);
         if (!orderData) {
             console.log('order not found');
             return;

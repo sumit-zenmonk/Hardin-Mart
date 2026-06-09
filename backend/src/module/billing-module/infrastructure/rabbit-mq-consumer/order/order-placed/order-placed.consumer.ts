@@ -29,7 +29,7 @@ export class OrderPlacedConsumer implements OnModuleInit {
                     return;
                 }
 
-                await this.orderPlacedService.handle(payload.user_uuid, { order_uuid: payload.order_uuid });
+                await this.orderPlacedService.handle(payload.customer_uuid, { order_uuid: payload.order_uuid });
 
                 await this.inboxRepository.createEntry({ outbox_uuid });
             },

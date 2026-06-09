@@ -18,7 +18,7 @@ export class OrderEntity {
     id: number;
 
     @Column({ type: "uuid", nullable: false })
-    user_uuid: string;
+    customer_uuid: string;
 
     @Column({ type: "uuid", nullable: false })
     address_uuid: string;
@@ -30,7 +30,7 @@ export class OrderEntity {
     is_billed: boolean;
 
     @ManyToOne(() => UserEntity, (user) => user.orders)
-    @JoinColumn({ name: "user_uuid" })
+    @JoinColumn({ name: "customer_uuid" })
     user: UserEntity;
 
     @ManyToOne(() => UserAddressEntity, (address) => address.orders)

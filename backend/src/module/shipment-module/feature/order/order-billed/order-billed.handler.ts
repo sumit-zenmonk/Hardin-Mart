@@ -19,7 +19,7 @@ export class OrderBilledService {
         connectionName: process.env.DB_POSTGRES_SHIPMENT_SCHEMA || 'shipment_schema',
     })
     async handle(order: OrderBilledMQEventPayload) {
-        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.user_uuid, order.order_uuid);
+        const orderData = await this.orderRepository.findByUserUuidAndOrderUuid(order.customer_uuid, order.order_uuid);
         if (!orderData) {
             throw new BadRequestException("Order not found");
         }
@@ -42,7 +42,7 @@ export class OrderBilledService {
                 routing_key: RoutingKeyEnum.ORDER_REFUND,
                 message_payload: {
                     order_uuid: order.order_uuid,
-                    user_uuid: order.user_uuid,
+                    customer_uuid: order.customer_uuid,
                     reason: "Stock not available",
                 },
             });
@@ -53,7 +53,7 @@ export class OrderBilledService {
             routing_key: RoutingKeyEnum.ORDER_SHIPPING_LABEL_CREATED,
             message_payload: {
                 order_uuid: order.order_uuid,
-                user_uuid: order.user_uuid,
+                customer_uuid: order.customer_uuid,
             },
         });
 
