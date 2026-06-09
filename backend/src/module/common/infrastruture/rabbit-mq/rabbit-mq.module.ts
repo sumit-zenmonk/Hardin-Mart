@@ -27,7 +27,7 @@ import * as BillingWalletHistoryRepo from 'src/module/billing-module/infrastruct
 import * as BillingUserRegisterService from 'src/module/billing-module/feature/user/user-register/user-register.handler';
 import * as BillingPayOrderService from 'src/module/billing-module/feature/wallet/pay-order/pay-order.handler';
 import * as BillingOrderRefundService from 'src/module/billing-module/feature/order/order-refund/order-refund.handler';
-import * as BillingOrderCreatedPayConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-created-pay/order-created-pay.consumer';
+import * as BillingOrderPlacedConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-placed/order-placed.consumer';
 import * as BillingUserRegisteredConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
 import * as BillingOrderRefundConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-refund/order-refund.consumer';
 
@@ -76,7 +76,7 @@ import * as ShipmentOrderPaidConsumer from 'src/module/shipment-module/infrastru
         BillingPayOrderService.PayOrderService,
         BillingOrderRefundService.OrderRefundService,
         BillingUserRegisteredConsumer.UserRegisteredConsumer,
-        BillingOrderCreatedPayConsumer.OrderCreatedPayConsumer,
+        BillingOrderPlacedConsumer.OrderPlacedConsumer,
         BillingOrderRefundConsumer.OrderRefundConsumer,
 
         // Shipment Module
