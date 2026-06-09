@@ -9,9 +9,6 @@ import { OutboxRepository } from "src/module/billing-module/infrastructure/repos
 import { OrderPaymentStatusEnum } from "src/module/billing-module/domain/order/order.enum";
 import { WalletHistoryTypeEnum } from "src/module/billing-module/domain/wallet-history/wallet.enum";
 import { ExchangeNameEnum, RoutingKeyEnum, } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum";
-import { SocketService } from "src/module/common/infrastruture/socket/socket.service";
-import { SocketEventNameEnum } from "src/module/common/infrastruture/socket/socket.enum";
-import { OrderStatusEnum } from "src/module/shipment-module/domain/order/order.enum";
 
 @Injectable()
 export class PayOrderService {
@@ -20,7 +17,6 @@ export class PayOrderService {
         private readonly walletHistoryRepository: WalletHistoryRepository,
         private readonly orderRepository: OrderRepository,
         private readonly outboxRepository: OutboxRepository,
-        private readonly socketService: SocketService,
     ) { }
 
     @Transactional({
@@ -84,40 +80,11 @@ export class PayOrderService {
                 },
             });
 
-            runOnTransactionCommit(async () => {
-                await this.socketService.emitToUser(
-                    user_uuid,
-                    SocketEventNameEnum.ORDER__PAYMENT_STATUS_CHANGED,
-                    {
-                        order_uuid,
-                        payment_status: OrderPaymentStatusEnum.PAID,
-                    },
-                );
-
-                await this.socketService.emitToUser(
-                    user_uuid,
-                    SocketEventNameEnum.ORDER_STATUS_CHANGED,
-                    {
-                        order_uuid,
-                        order_status: OrderStatusEnum.BILLED,
-                    },
-                );
-            });
-
             return;
         } catch (error) {
             await this.orderRepository.updateOrderPaymentStatus(
                 order_uuid,
                 OrderPaymentStatusEnum.FAILED,
-            );
-
-            await this.socketService.emitToUser(
-                user_uuid,
-                SocketEventNameEnum.ORDER__PAYMENT_STATUS_CHANGED,
-                {
-                    order_uuid,
-                    payment_status: OrderPaymentStatusEnum.FAILED,
-                },
             );
 
             throw error;

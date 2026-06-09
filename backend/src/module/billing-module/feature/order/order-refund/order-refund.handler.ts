@@ -3,8 +3,6 @@ import { OrderRepository } from "src/module/billing-module/infrastructure/reposi
 import { OrderPaymentStatusEnum } from "src/module/billing-module/domain/order/order.enum";
 import { WalletHistoryTypeEnum } from "src/module/billing-module/domain/wallet-history/wallet.enum";
 import type { OrderRefundMQEventPayload } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type";
-import { SocketService } from "src/module/common/infrastruture/socket/socket.service";
-import { SocketEventNameEnum } from "src/module/common/infrastruture/socket/socket.enum";
 import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 import { WalletRepository } from "src/module/billing-module/infrastructure/repository/wallet.repository";
 import { WalletHistoryRepository } from "src/module/billing-module/infrastructure/repository/wallet.history.repository";
@@ -15,7 +13,6 @@ export class OrderRefundService {
         private readonly orderRepository: OrderRepository,
         private readonly walletRepository: WalletRepository,
         private readonly walletHistoryRepository: WalletHistoryRepository,
-        private readonly socketService: SocketService,
     ) { }
 
     @Transactional({
@@ -45,17 +42,6 @@ export class OrderRefundService {
             amount: Number(orderData.total_price),
             type: WalletHistoryTypeEnum.REFUND,
             description: order.reason || `Refund for order '${order.order_uuid}'`,
-        });
-
-        runOnTransactionCommit(async () => {
-            await this.socketService.emitToUser(
-                order.user_uuid,
-                SocketEventNameEnum.ORDER__PAYMENT_STATUS_CHANGED,
-                {
-                    order_uuid: order.order_uuid,
-                    payment_status: OrderPaymentStatusEnum.REFUND
-                }
-            );
         });
 
         return;

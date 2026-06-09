@@ -2,8 +2,6 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { OrderRepository } from "src/module/shipment-module/infrastructure/repository/order.repository";
 import type { OrderPaidMQEventPayload } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type";
 import { OrderStatusEnum } from "src/module/shipment-module/domain/order/order.enum";
-import { SocketService } from "src/module/common/infrastruture/socket/socket.service";
-import { SocketEventNameEnum } from "src/module/common/infrastruture/socket/socket.enum";
 import { ProductRepository } from "src/module/shipment-module/infrastructure/repository/product.repository";
 import { OutboxRepository } from "src/module/shipment-module/infrastructure/repository/outbox.repository";
 import { ExchangeNameEnum, RoutingKeyEnum } from "src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum";
@@ -15,7 +13,6 @@ export class OrderPaidService {
         private readonly orderRepository: OrderRepository,
         private readonly productRepository: ProductRepository,
         private readonly outboxRepository: OutboxRepository,
-        private readonly socketService: SocketService,
     ) { }
 
     @Transactional({
@@ -50,30 +47,6 @@ export class OrderPaidService {
                 },
             });
         }
-
-        runOnTransactionCommit(async () => {
-            await this.socketService.emitToUser(
-                order.user_uuid,
-                SocketEventNameEnum.ORDER_STATUS_CHANGED,
-                {
-                    order_uuid: order.order_uuid,
-                    order_status: orderStatus,
-                },
-            );
-
-            if (hasEnoughStock) {
-                for (const item of orderData.items) {
-                    await this.socketService.emitToUser(
-                        order.user_uuid,
-                        SocketEventNameEnum.PRODUCT_STOCK_DECREASE_BY_QUANTITY,
-                        {
-                            product_uuid: item.product_uuid,
-                            quantity: item.quantity,
-                        },
-                    );
-                }
-            }
-        });
         return;
     }
 
