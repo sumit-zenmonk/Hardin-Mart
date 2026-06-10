@@ -3,7 +3,7 @@ import { RabbitMQService } from 'src/module/common/infrastruture/rabbit-mq/rabbi
 import { ExchangeNameEnum, ExchangeTypeEnum, QueueEnum, RoutingKeyEnum } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum';
 import { BackOrderedMQEventPayload, RabbitMQConsumerMessage, } from 'src/module/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.type';
 import { InboxRepository } from '../../../repository/inbox.repository';
-import { BackOrderedService } from 'src/module/billing-module/feature/order/back-ordered/back-ordered.handler';
+import { OrderRefundService } from 'src/module/billing-module/feature/order/order-refund/order-refund.handler';
 
 @Injectable()
 export class BackOrderedConsumer implements OnModuleInit {
@@ -12,7 +12,7 @@ export class BackOrderedConsumer implements OnModuleInit {
     constructor(
         private readonly rabbitMQService: RabbitMQService,
         private readonly inboxRepository: InboxRepository,
-        private readonly backOrderedService: BackOrderedService,
+        private readonly orderRefundService: OrderRefundService,
     ) { }
 
     async onModuleInit() {
@@ -29,7 +29,7 @@ export class BackOrderedConsumer implements OnModuleInit {
                     return;
                 }
 
-                await this.backOrderedService.handle(payload);
+                await this.orderRefundService.handle(payload);
 
                 await this.inboxRepository.createEntry({ outbox_uuid });
             },

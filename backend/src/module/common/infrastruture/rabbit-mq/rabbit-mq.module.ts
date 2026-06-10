@@ -36,10 +36,8 @@ import * as BillingWalletHistoryRepo from 'src/module/billing-module/infrastruct
 import * as BillingUserRegisterService from 'src/module/billing-module/feature/user/user-register/user-register.handler';
 import * as BillingOrderPlacedService from 'src/module/billing-module/feature/order/order-placed/order-placed.handler';
 import * as BillingOrderRefundService from 'src/module/billing-module/feature/order/order-refund/order-refund.handler';
-import * as BillingBackOrderedService from 'src/module/billing-module/feature/order/back-ordered/back-ordered.handler';
 import * as BillingOrderPlacedConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-placed/order-placed.consumer';
 import * as BillingUserRegisteredConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/user/user-registered/user-registered.consumer';
-import * as BillingOrderRefundConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/order-refund/order-refund.consumer';
 import * as BillingBackOrderedConsumer from 'src/module/billing-module/infrastructure/rabbit-mq-consumer/order/back-ordered/back-ordered.consumer';
 
 // Shipment Module
@@ -97,10 +95,8 @@ import * as ShipmentOrderPlacedConsumer from 'src/module/shipment-module/infrast
         BillingUserRegisterService.UserRegisterService,
         BillingOrderPlacedService.OrderPlacedService,
         BillingOrderRefundService.OrderRefundService,
-        BillingBackOrderedService.BackOrderedService,
         BillingUserRegisteredConsumer.UserRegisteredConsumer,
         BillingOrderPlacedConsumer.OrderPlacedConsumer,
-        BillingOrderRefundConsumer.OrderRefundConsumer,
         BillingBackOrderedConsumer.BackOrderedConsumer,
 
         // Shipment Module

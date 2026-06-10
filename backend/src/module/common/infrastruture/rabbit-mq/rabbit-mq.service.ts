@@ -115,15 +115,6 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
         // billing order refund queue
         await this.setupExchangeQueueAndBind(
-            QueueEnum.BILLING_ORDER_REFUND_QUEUE,
-            ExchangeNameEnum.BILLING_EXCHANGE,
-            RoutingKeyEnum.ORDER_REFUND,
-            ExchangeTypeEnum.DIRECT,
-        );
-        await this.setupRetryQueue(QueueEnum.BILLING_ORDER_REFUND_QUEUE);
-
-        // billing order refund queue
-        await this.setupExchangeQueueAndBind(
             QueueEnum.SALE_ORDER_REFUND_QUEUE,
             ExchangeNameEnum.BILLING_EXCHANGE,
             RoutingKeyEnum.ORDER_REFUND,
