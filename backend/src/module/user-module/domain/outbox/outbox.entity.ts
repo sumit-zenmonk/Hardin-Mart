@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, } from "typeorm";
-import { ExchangeNameEnum, RoutingKeyEnum } from "src/common/infrastruture/rabbit-mq/type-enum/rabbit-mq.enum";
 import { OutboxStatusEnum } from "./outbox.enum";
 
 @Entity("outbox")
@@ -18,19 +17,11 @@ export class OutboxEntity {
     @Column({ type: "varchar", nullable: false, })
     event_name: string;
 
-    @Column({
-        type: "enum",
-        enum: ExchangeNameEnum,
-        nullable: false,
-    })
-    exchange_name: ExchangeNameEnum;
+    @Column({ type: "varchar", nullable: false, })
+    exchange_name: string;
 
-    @Column({
-        type: "enum",
-        enum: RoutingKeyEnum,
-        nullable: true,
-    })
-    routing_key: RoutingKeyEnum;
+    @Column({ type: "varchar", nullable: true, })
+    routing_key: string;
 
     @Column({ type: "jsonb" })
     message_payload: Record<string, any>;
