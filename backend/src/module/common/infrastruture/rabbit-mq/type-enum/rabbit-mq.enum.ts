@@ -40,6 +40,7 @@ export enum RoutingKeyEnum {
 
     // SHIPPING_EXCHANGE
     ORDER_SHIPPING_LABEL_CREATED = 'order.shipping.label.created',
+    ORDER_SHIPPING_BACK_ORDERED = 'order.shipping.back.ordered',
 }
 
 // queue name (module name) + routing key + endfix(queue)
@@ -64,6 +65,9 @@ export enum QueueEnum {
 
     // ORDER_SHIPPING_LABEL_CREATED Key
     SALE_ORDER_SHIPPING_LABEL_CREATED_QUEUE = 'sale.order.shipping.label.created.queue',
+
+    // ORDER_SHIPPING_BACK_ORDERED Key
+    BILLING_ORDER_SHIPPING_BACK_ORDERED_QUEUE = 'billing.order.shipping.back.ordered.queue',
 
     // ORDER_PAYMENT_FAILED
     SALE_ORDER_PAYMENT_FAILED_QUEUE = 'sale.order.payment.failed.queue',
