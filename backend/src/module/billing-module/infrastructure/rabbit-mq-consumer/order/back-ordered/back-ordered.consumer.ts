@@ -17,7 +17,7 @@ export class BackOrderedConsumer implements OnModuleInit {
 
     async onModuleInit() {
         await this.rabbitMQService.consumeMessages<RabbitMQConsumerMessage<BackOrderedMQEventPayload>>(
-            QueueEnum.BILLING_ORDER_SHIPPING_BACK_ORDERED_QUEUE,
+            QueueEnum.BILLING_BACK_ORDERED_QUEUE,
             async (data) => {
                 const { outbox_uuid, payload } = data;
 

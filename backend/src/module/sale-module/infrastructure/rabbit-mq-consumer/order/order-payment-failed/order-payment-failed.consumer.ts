@@ -17,7 +17,7 @@ export class OrderPaymentFailedConsumer implements OnModuleInit {
 
     async onModuleInit() {
         await this.rabbitMQService.consumeMessages<RabbitMQConsumerMessage<OrderPaymentFailedMQEventPayload>>(
-            QueueEnum.SALE_ORDER_PAYMENT_FAILED_QUEUE,
+            QueueEnum.SALE_PAYMENT_FAILED_QUEUE,
             async (data) => {
                 const { outbox_uuid, payload } = data;
 

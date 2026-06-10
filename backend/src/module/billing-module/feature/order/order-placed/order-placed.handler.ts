@@ -53,7 +53,7 @@ export class OrderPlacedService {
                 // create outbox entry
                 await this.outboxRepository.createOutboxEntry({
                     exchange_name: ExchangeNameEnum.BILLING_EXCHANGE,
-                    routing_key: RoutingKeyEnum.ORDER_PAYMENT_FAILED,
+                    routing_key: RoutingKeyEnum.PAYMENT_FAILED,
                     message_payload: {
                         order_uuid,
                         customer_uuid: customer_uuid,

@@ -142,30 +142,30 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
         // sale order shipment label created queue
         await this.setupExchangeQueueAndBind(
-            QueueEnum.SALE_ORDER_SHIPPING_LABEL_CREATED_QUEUE,
+            QueueEnum.SALE_SHIPPING_LABEL_CREATED_QUEUE,
             ExchangeNameEnum.SHIPPING_EXCHANGE,
-            RoutingKeyEnum.ORDER_SHIPPING_LABEL_CREATED,
+            RoutingKeyEnum.SHIPPING_LABEL_CREATED,
             ExchangeTypeEnum.DIRECT,
         );
-        await this.setupRetryQueue(QueueEnum.SALE_ORDER_SHIPPING_LABEL_CREATED_QUEUE);
+        await this.setupRetryQueue(QueueEnum.SALE_SHIPPING_LABEL_CREATED_QUEUE);
 
         // sale order payment failed queue
         await this.setupExchangeQueueAndBind(
-            QueueEnum.SALE_ORDER_PAYMENT_FAILED_QUEUE,
+            QueueEnum.SALE_PAYMENT_FAILED_QUEUE,
             ExchangeNameEnum.BILLING_EXCHANGE,
-            RoutingKeyEnum.ORDER_PAYMENT_FAILED,
+            RoutingKeyEnum.PAYMENT_FAILED,
             ExchangeTypeEnum.DIRECT,
         );
-        await this.setupRetryQueue(QueueEnum.SALE_ORDER_PAYMENT_FAILED_QUEUE);
+        await this.setupRetryQueue(QueueEnum.SALE_PAYMENT_FAILED_QUEUE);
 
         // shipping back ordered queue
         await this.setupExchangeQueueAndBind(
-            QueueEnum.BILLING_ORDER_SHIPPING_BACK_ORDERED_QUEUE,
+            QueueEnum.BILLING_BACK_ORDERED_QUEUE,
             ExchangeNameEnum.SHIPPING_EXCHANGE,
-            RoutingKeyEnum.ORDER_SHIPPING_BACK_ORDERED,
+            RoutingKeyEnum.BACK_ORDERED,
             ExchangeTypeEnum.DIRECT,
         );
-        await this.setupRetryQueue(QueueEnum.BILLING_ORDER_SHIPPING_BACK_ORDERED_QUEUE);
+        await this.setupRetryQueue(QueueEnum.BILLING_BACK_ORDERED_QUEUE);
     }
 
     private async setupRetryQueue(originalQueue: string, retryDelay = Number(process.env.RETRYDELAY) || 15000) {

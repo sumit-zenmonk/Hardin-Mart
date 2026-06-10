@@ -5,7 +5,7 @@ export class outboxMigration1778505599999 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "billing_schema"."outbox_exchange_name_enum" AS ENUM('user.exchange','sale.exchange','billing.exchange','shipping.exchange')`);
-        await queryRunner.query(`CREATE TYPE "billing_schema"."outbox_routing_key_enum" AS ENUM('user.registered','order.placed','order.billed','order.refund','order.payment.failed','order.shipping.label.created','order.shipping.back.ordered')`);
+        await queryRunner.query(`CREATE TYPE "billing_schema"."outbox_routing_key_enum" AS ENUM('user.registered','order.placed','order.billed','order.refund','payment.failed','shipping.label.created','back.ordered')`);
         await queryRunner.query(`CREATE TYPE "billing_schema"."outbox_status_enum" AS ENUM('pending','published','failed')`);
 
         await queryRunner.createTable(

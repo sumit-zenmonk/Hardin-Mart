@@ -17,7 +17,7 @@ export class OrderShippingLabelCreatedConsumer implements OnModuleInit {
 
     async onModuleInit() {
         await this.rabbitMQService.consumeMessages<RabbitMQConsumerMessage<OrderShippingLabelCreatedMQEventPayload>>(
-            QueueEnum.SALE_ORDER_SHIPPING_LABEL_CREATED_QUEUE,
+            QueueEnum.SALE_SHIPPING_LABEL_CREATED_QUEUE,
             async (data) => {
                 const { outbox_uuid, payload } = data;
 

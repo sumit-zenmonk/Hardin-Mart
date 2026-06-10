@@ -36,11 +36,11 @@ export enum RoutingKeyEnum {
     // BILLING_EXCHANGE
     ORDER_BILLED = 'order.billed',
     ORDER_REFUND = 'order.refund',
-    ORDER_PAYMENT_FAILED = 'order.payment.failed',
+    PAYMENT_FAILED = 'payment.failed',
 
     // SHIPPING_EXCHANGE
-    ORDER_SHIPPING_LABEL_CREATED = 'order.shipping.label.created',
-    ORDER_SHIPPING_BACK_ORDERED = 'order.shipping.back.ordered',
+    SHIPPING_LABEL_CREATED = 'shipping.label.created',
+    BACK_ORDERED = 'back.ordered',
 }
 
 // queue name (module name) + routing key + endfix(queue)
@@ -62,12 +62,12 @@ export enum QueueEnum {
     BILLING_ORDER_PLACED_QUEUE = 'billing.order.placed.queue',
     SHIPMENT_ORDER_PLACED_QUEUE = 'shipment.order.placed.queue',
 
-    // ORDER_SHIPPING_LABEL_CREATED Key
-    SALE_ORDER_SHIPPING_LABEL_CREATED_QUEUE = 'sale.order.shipping.label.created.queue',
+    // SHIPPING_LABEL_CREATED Key
+    SALE_SHIPPING_LABEL_CREATED_QUEUE = 'sale.shipping.label.created.queue',
 
-    // ORDER_SHIPPING_BACK_ORDERED Key
-    BILLING_ORDER_SHIPPING_BACK_ORDERED_QUEUE = 'billing.order.shipping.back.ordered.queue',
+    // BACK_ORDERED Key
+    BILLING_BACK_ORDERED_QUEUE = 'billing.back.ordered.queue',
 
-    // ORDER_PAYMENT_FAILED
-    SALE_ORDER_PAYMENT_FAILED_QUEUE = 'sale.order.payment.failed.queue',
+    // PAYMENT_FAILED
+    SALE_PAYMENT_FAILED_QUEUE = 'sale.payment.failed.queue',
 }
