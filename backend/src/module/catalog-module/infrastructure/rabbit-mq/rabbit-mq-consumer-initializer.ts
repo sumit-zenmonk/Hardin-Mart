@@ -4,8 +4,8 @@ import { EventHandlerMapService } from './event-handler.map.service';
 import { RabbitMQConsumerMessage } from '../../../../common/infrastruture/rabbit-mq/rabbit-mq.type';
 
 @Injectable()
-export class RabbitMQConsumerInitializer implements OnModuleInit {
-    private readonly logger = new Logger(RabbitMQConsumerInitializer.name);
+export class CatalogRabbitMQConsumerInitializer implements OnModuleInit {
+    private readonly logger = new Logger(CatalogRabbitMQConsumerInitializer.name);
 
     constructor(
         private readonly rabbitMQService: RabbitMQService,

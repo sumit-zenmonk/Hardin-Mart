@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CatalogEventHandlerMap, UserRegisteredMQEventPayload } from './rabbit-mq.type';
 import { UserRegisteredService } from 'src/module/catalog-module/feature/user/user-registered/user-registered.handler';
 import { InboxRepository } from '../repository/inbox.repository';
@@ -10,6 +10,7 @@ export class EventHandlerMapService {
         private readonly userRegisteredService: UserRegisteredService,
         private readonly inboxRepository: InboxRepository,
     ) { }
+    private readonly logger = new Logger(EventHandlerMapService.name);
 
     // Map event names to handlers
     public eventHandlerMap: CatalogEventHandlerMap = {
@@ -23,7 +24,7 @@ export class EventHandlerMapService {
     async executeHandler(eventName: string, payload: any, outbox_uuid: string) {
         const handler = this.eventHandlerMap[eventName];
         if (!handler) {
-            console.log(`No handler found for event: ${eventName} in Catalog Module`);
+            this.logger.verbose(`No handler found for event: ${eventName} in Catalog Module`);
             return;
         }
 

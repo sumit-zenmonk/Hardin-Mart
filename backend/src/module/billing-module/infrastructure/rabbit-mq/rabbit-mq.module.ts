@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RabbitMQService } from './rabbit-mq.service';
 import { EventHandlerMapService } from './event-handler.map.service';
-import { RabbitMQConsumerInitializer } from './rabbit-mq-consumer-initializer';
+import { BillingRabbitMQConsumerInitializer } from './rabbit-mq-consumer-initializer';
 import { UserRegisteredService } from '../../feature/user/user-registered/user-registered.handler';
 import { OrderPlacedService } from '../../feature/order/order-placed/order-placed.handler';
 import { OrderRefundService } from '../../feature/order/order-refund/order-refund.handler';
@@ -15,7 +15,7 @@ import { OutboxRepository } from '../repository/outbox.repository';
 @Module({
     providers: [
         RabbitMQService,
-        RabbitMQConsumerInitializer,
+        BillingRabbitMQConsumerInitializer,
         EventHandlerMapService,
         UserRegisteredService,
         OrderPlacedService,
