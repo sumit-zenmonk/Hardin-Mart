@@ -45,7 +45,7 @@ export type ShipmentEventPayloadMap = {
 export type ShipmentEventPayload = ShipmentEventPayloadMap[keyof ShipmentEventPayloadMap];
 
 // 1. Define the Handler Function Type
-export type EventHandlerFunction<T extends keyof ShipmentEventPayloadMap> = 
+export type EventHandlerFunction<T extends keyof ShipmentEventPayloadMap> =
     (payload: ShipmentEventPayloadMap[T]) => Promise<void>;
 
 // 2. Map of exact handler signatures

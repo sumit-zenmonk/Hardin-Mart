@@ -5,6 +5,7 @@ import { ProductRepository } from "src/module/shipment-module/infrastructure/rep
 import { OutboxRepository } from "src/module/shipment-module/infrastructure/repository/outbox.repository";
 import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 import type { OrderBilledMQEventPayload } from "src/module/shipment-module/infrastructure/rabbit-mq/rabbit-mq.type";
+import { ShippingPolicyService } from "src/module/shipment-module/infrastructure/policy/shipping/shipping.policy.service";
 
 @Injectable()
 export class OrderBilledService {
@@ -14,6 +15,7 @@ export class OrderBilledService {
         private readonly orderRepository: OrderRepository,
         private readonly productRepository: ProductRepository,
         private readonly outboxRepository: OutboxRepository,
+        private readonly shippingPolicyService: ShippingPolicyService,
     ) { }
 
     @Transactional({
@@ -49,14 +51,7 @@ export class OrderBilledService {
             return;
         }
 
-        await this.outboxRepository.createOutboxEntry({
-            exchange_name: this.SHIPPING_EXCHANGE,
-            event_name: 'shipping.label.created',
-            message_payload: {
-                order_uuid: order.order_uuid,
-                customer_uuid: order.customer_uuid,
-            },
-        });
+        await this.shippingPolicyService.handleSetPolicy(order.order_uuid, { is_billed: true, is_placed: orderData.is_placed, data: order });
 
         return;
     }

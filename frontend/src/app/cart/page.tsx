@@ -168,7 +168,7 @@ export default function CartPage() {
                                         </Typography>
 
                                         <Typography className={styles.price}>
-                                            Price: ₹ {Number(price) * item.quantity}
+                                            Price: ₹ {(Number(price) * item.quantity)?.toFixed(2)}
                                         </Typography>
 
                                         <Typography className={styles.stock}>

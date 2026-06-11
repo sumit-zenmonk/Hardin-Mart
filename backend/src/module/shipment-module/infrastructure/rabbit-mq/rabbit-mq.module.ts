@@ -10,12 +10,14 @@ import { UserRepository } from '../repository/user.repository';
 import { OrderRepository } from '../repository/order.repository';
 import { ProductRepository } from '../repository/product.repository';
 import { OutboxRepository } from '../repository/outbox.repository';
+import { ShippingPolicyService } from '../policy/shipping/shipping.policy.service';
 
 @Module({
     providers: [
         RabbitMQService,
         RabbitMQConsumerInitializer,
         EventHandlerMapService,
+        ShippingPolicyService,
         UserRegisterService,
         OrderPlacedService,
         OrderBilledService,
