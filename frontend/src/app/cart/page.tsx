@@ -226,7 +226,7 @@ export default function CartPage() {
                             const product = products.find((product) => product.uuid === item.product_uuid);
                             const saleProduct = saleProducts.find((product) => product.uuid === item.product_uuid);
                             return total + (Number(product?.price || item.product?.price || saleProduct?.price || 0) * item.quantity);
-                        }, 0)
+                        }, 0)?.toFixed(2)
                     }
                 </Typography>
             </Box>
