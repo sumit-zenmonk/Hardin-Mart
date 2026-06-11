@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { OutboxRepository } from '../../repository/outbox.repository';
-import { RabbitMQService } from 'src/common/infrastruture/rabbit-mq/rabbit-mq.service';
 import { OutboxStatusEnum } from 'src/module/sale-module/domain/outbox/outbox.enum';
+import { RabbitMQService } from 'src/module/sale-module/infrastructure/rabbit-mq/rabbit-mq.service';
 
 @Injectable()
 export class OutboxEntryPublisherCronService {
@@ -25,7 +25,7 @@ export class OutboxEntryPublisherCronService {
                     //push to mq
                     await this.rabbitMQService.publishToExchange(
                         entry.exchange_name,
-                        entry.routing_key,
+                        '',
                         {
                             outbox_uuid: entry.uuid,
                             event_name: entry.event_name,
