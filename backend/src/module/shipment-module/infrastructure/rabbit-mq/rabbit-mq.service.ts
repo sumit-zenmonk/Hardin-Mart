@@ -50,7 +50,7 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
                 this.channel = undefined;
                 if (this.isClosing) return;
 
-                this.logger.warn("Connection closed, reconnecting...");
+                this.logger.debug("Connection closed, reconnecting...");
                 setTimeout(() => this.connectToRabbitMQ(), 1000);
             });
 
@@ -124,7 +124,7 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     ) {
         try {
             while (!this.channel) {
-                this.logger.warn('Waiting for RabbitMQ channel...');
+                this.logger.debug('Waiting for RabbitMQ channel...');
                 await new Promise((resolve) => setTimeout(resolve, 1000));
             }
 
