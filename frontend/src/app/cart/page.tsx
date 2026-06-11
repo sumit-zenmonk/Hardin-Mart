@@ -86,7 +86,7 @@ export default function CartPage() {
         try {
             await dispatch(getAddresses()).unwrap();
         } catch (err: any) {
-            console.error("Error fetching addresses:", err);
+            console.log("Error fetching addresses:", err);
         }
     };
 
