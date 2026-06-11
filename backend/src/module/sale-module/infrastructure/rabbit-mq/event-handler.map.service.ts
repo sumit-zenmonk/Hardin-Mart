@@ -22,25 +22,30 @@ export class EventHandlerMapService {
 
     // Map event names to handlers
     public eventHandlerMap: SaleEventHandlerMap = {
-        'user.registered': (payload: UserRegisteredMQEventPayload) =>
-            this.handleUserRegistered(payload),
-        'order.billed': (payload: OrderBilledMQEventPayload) =>
-            this.handleOrderBilled(payload),
-        'order.refund': (payload: OrderRefundMQEventPayload) =>
-            this.handleOrderRefund(payload),
-        'payment.failed': (payload: OrderPaymentFailedMQEventPayload) =>
-            this.handleOrderPaymentFailed(payload),
-        'shipping.label.created': (payload: OrderShippingLabelCreatedMQEventPayload) =>
-            this.handleOrderShippingLabelCreated(payload),
+        'user.registered': [
+            (payload: UserRegisteredMQEventPayload) => this.handleUserRegistered(payload),
+        ],
+        'order.billed': [
+            (payload: OrderBilledMQEventPayload) => this.handleOrderBilled(payload),
+        ],
+        'order.refund': [
+            (payload: OrderRefundMQEventPayload) => this.handleOrderRefund(payload),
+        ],
+        'payment.failed': [
+            (payload: OrderPaymentFailedMQEventPayload) => this.handleOrderPaymentFailed(payload),
+        ],
+        'shipping.label.created': [
+            (payload: OrderShippingLabelCreatedMQEventPayload) => this.handleOrderShippingLabelCreated(payload),
+        ],
     };
 
     @Transactional({
         connectionName: process.env.DB_POSTGRES_SALE_SCHEMA || 'sale_schema',
     })
     async executeHandler(eventName: string, payload: any, outbox_uuid: string) {
-        const handler = this.eventHandlerMap[eventName];
-        if (!handler) {
-           this.logger.verbose(`No handler found for event: ${eventName} in Sale Module`);
+        const handlers = this.eventHandlerMap[eventName];
+        if (!handlers || !handlers.length) {
+            this.logger.verbose(`No handler found for event: ${eventName} in Sale Module`);
             return;
         }
 
@@ -48,8 +53,9 @@ export class EventHandlerMapService {
         if (alreadyProcessed) {
             return;
         }
-        await handler.call(this, payload);
-
+        for (const handler of handlers) {
+            await handler.call(this, payload, outbox_uuid, eventName);
+        }
         await this.inboxRepository.createEntry({ outbox_uuid, event_name: eventName });
     }
 

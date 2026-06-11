@@ -14,16 +14,17 @@ export class EventHandlerMapService {
 
     // Map event names to handlers
     public eventHandlerMap: CatalogEventHandlerMap = {
-        'user.registered': (payload: UserRegisteredMQEventPayload) =>
-            this.handleUserRegistered(payload),
+        'user.registered': [
+            (payload: UserRegisteredMQEventPayload) => this.handleUserRegistered(payload),
+        ]
     };
 
     @Transactional({
         connectionName: process.env.DB_POSTGRES_CATALOG_SCHEMA || 'catalog_schema',
     })
     async executeHandler(eventName: string, payload: any, outbox_uuid: string) {
-        const handler = this.eventHandlerMap[eventName];
-        if (!handler) {
+        const handlers = this.eventHandlerMap[eventName];
+        if (!handlers || !handlers.length) {
             this.logger.verbose(`No handler found for event: ${eventName} in Catalog Module`);
             return;
         }
@@ -32,8 +33,9 @@ export class EventHandlerMapService {
         if (alreadyProcessed) {
             return;
         }
-        await handler.call(this, payload);
-
+        for (const handler of handlers) {
+            await handler.call(this, payload, outbox_uuid, eventName);
+        }
         await this.inboxRepository.createEntry({ outbox_uuid, event_name: eventName });
     }
 

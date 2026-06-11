@@ -21,5 +21,5 @@ export type EventHandlerFunction<T extends keyof CatalogEventPayloadMap> =
 
 // 2. Map of exact handler signatures
 export type CatalogEventHandlerMap = {
-    [K in keyof CatalogEventPayloadMap]: EventHandlerFunction<K>;
+    [K in keyof CatalogEventPayloadMap]: EventHandlerFunction<K>[];
 };

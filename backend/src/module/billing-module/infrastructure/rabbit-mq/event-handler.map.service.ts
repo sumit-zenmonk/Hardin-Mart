@@ -18,20 +18,23 @@ export class EventHandlerMapService {
 
     // Map event names to handlers
     public eventHandlerMap: BillingEventHandlerMap = {
-        'user.registered': (payload: UserRegisteredMQEventPayload) =>
-            this.handleUserRegistered(payload),
-        'order.placed': (payload: OrderPlacedMQEventPayload) =>
-            this.handleOrderPlaced(payload),
-        'back.ordered': (payload: BackOrderedMQEventPayload) =>
-            this.handleBackOrdered(payload),
+        'user.registered': [
+            (payload: UserRegisteredMQEventPayload) => this.handleUserRegistered(payload),
+        ],
+        'order.placed': [
+            (payload: OrderPlacedMQEventPayload) => this.handleOrderPlaced(payload),
+        ],
+        'back.ordered': [
+            (payload: BackOrderedMQEventPayload) => this.handleBackOrdered(payload),
+        ],
     };
 
     @Transactional({
         connectionName: process.env.DB_POSTGRES_BILLING_SCHEMA || 'billing_schema',
     })
     async executeHandler(eventName: string, payload: any, outbox_uuid: string) {
-        const handler = this.eventHandlerMap[eventName];
-        if (!handler) {
+        const handlers = this.eventHandlerMap[eventName];
+        if (!handlers || !handlers.length) {
             this.logger.verbose(`No handler found for event: ${eventName} in Billing Module`,);
             return;
         }
@@ -40,8 +43,9 @@ export class EventHandlerMapService {
         if (alreadyProcessed) {
             return;
         }
-        await handler.call(this, payload);
-
+        for (const handler of handlers) {
+            await handler.call(this, payload, outbox_uuid, eventName);
+        }
         await this.inboxRepository.createEntry({ outbox_uuid, event_name: eventName });
     }
 
