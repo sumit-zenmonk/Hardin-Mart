@@ -1,4 +1,3 @@
-
 import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from "@nestjs/common";
 import amqp, { Channel, ChannelModel } from "amqplib";
 import { ExchangeType, ExchangeTypeEnum, PublishHeadersInterface, RabbitMQConsumerMessage, RetryMechanismHeaderEnum } from "../../../../common/infrastruture/rabbit-mq/rabbit-mq.type";
