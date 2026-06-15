@@ -40,7 +40,7 @@ export class OutboxEntryPublisherCronService {
                                 payload: entry.message_payload,
                             },
                         );
-                        this.logger.verbose(`MQ Event Published -> ${entry.event_name} -> in Sale Module`);
+                        this.logger.verbose(`MQ Event Published -> ${entry.event_name} -> from Sale Module`);
                     })
                 } catch (error) {
                     this.logger.error(`Failed to publish outbox entry: ${entry.uuid}`,);
