@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { OrderShippingLabelCreatedMQEventPayload, ShippingPolicyType } from "./shipping.policy.type";
+import { ShippingPolicyType } from "./shipping.policy.type";
 import { OutboxRepository } from "../../repository/outbox.repository";
 import { PolicyClass } from "src/common/infrastruture/policy/policy.abstract";
 import { OrderPublishEventEnum } from "src/module/shipment-module/domain/order/order.event";
