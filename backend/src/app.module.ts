@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, OnModuleDestroy, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
@@ -11,6 +11,8 @@ import { DataSourceOptions } from 'typeorm';
 import { BcryptService } from './common/infrastruture/services/bcrypt.service';
 import { AuthenticateMiddleware } from './common/infrastruture/middleware/authenticate.middleware';
 import { createTransactionalDataSource } from './common/infrastruture/services/typeorm.transactional';
+import { RabbitMQService } from './common/infrastruture/rabbit-mq/rabbit-mq.service';
+import { RabbitMQCommonModule } from './common/infrastruture/rabbit-mq/rabbit-mq.module';
 
 // User Module
 import { userDataSource } from './module/user-module/infrastructure/database/data-source';
@@ -60,6 +62,7 @@ import { ShipmentRabbitMQModule } from './module/shipment-module/infrastructure/
       // signOptions: { expiresIn: '60m' },
     }),
     ScheduleModule.forRoot(),
+    RabbitMQCommonModule,
 
     //User Modules
     TypeOrmModule.forRootAsync({
