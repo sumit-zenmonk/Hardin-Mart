@@ -45,7 +45,7 @@ export class EventHandlerMapService {
             return;
         }
         for (const handler of handlers) {
-            await handler.call(this, payload, outbox_uuid, eventName);
+            await handler(payload, outbox_uuid, eventName);
         }
         await this.inboxRepository.createEntry({ outbox_uuid, event_name: eventName });
     }
