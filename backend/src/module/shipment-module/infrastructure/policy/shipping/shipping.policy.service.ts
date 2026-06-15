@@ -8,9 +8,6 @@ import { OrderPublishEventEnum } from "src/module/shipment-module/domain/order/o
 export class ShippingPolicyService implements PolicyClass {
     protected policyMap = new Map<string, any>();
     protected readonly SHIPPING_EXCHANGE = 'shipping.exchange';
-    protected readonly BILLING_EXCHANGE = 'billing.exchange';
-    protected readonly USER_EXCHANGE = 'user.exchange';
-    protected readonly SALE_EXCHANGE = 'sale.exchange';
 
     constructor(
         private readonly outboxRepository: OutboxRepository,
