@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { ShippingPolicyType } from "./shipping.policy.type";
 import { OutboxRepository } from "../../repository/outbox.repository";
-import { PolicyClass } from "src/common/infrastruture/policy/policy.abstract";
+import { PolicyInterfaceService } from "src/common/infrastruture/policy/policy.interface";
 import { OrderPublishEventEnum } from "src/module/shipment-module/domain/order/order.event";
 
 @Injectable()
-export class ShippingPolicyService implements PolicyClass {
+export class ShippingPolicyService implements PolicyInterfaceService {
     protected policyMap = new Map<string, any>();
     protected readonly SHIPPING_EXCHANGE = 'shipping.exchange';
 

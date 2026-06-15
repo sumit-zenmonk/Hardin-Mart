@@ -1,12 +1,12 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { OrderRepository } from "src/module/shipment-module/infrastructure/repository/order.repository";
 import { OrderStatusEnum } from "src/module/sale-module/domain/order/order.enum";
 import { ProductRepository } from "src/module/shipment-module/infrastructure/repository/product.repository";
 import { OutboxRepository } from "src/module/shipment-module/infrastructure/repository/outbox.repository";
 import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 import type { OrderBilledMQEventPayload } from "src/module/shipment-module/infrastructure/rabbit-mq/rabbit-mq.type";
-import { ShippingPolicyService } from "src/module/shipment-module/infrastructure/policy/shipping/shipping.policy.service";
 import { OrderPublishEventEnum } from "src/module/shipment-module/domain/order/order.event";
+import type { PolicyInterfaceService } from "src/common/infrastruture/policy/policy.interface";
 
 @Injectable()
 export class OrderBilledService {
@@ -16,7 +16,7 @@ export class OrderBilledService {
         private readonly orderRepository: OrderRepository,
         private readonly productRepository: ProductRepository,
         private readonly outboxRepository: OutboxRepository,
-        private readonly shippingPolicyService: ShippingPolicyService,
+        @Inject('POLICY_TOKEN') private readonly policyService: PolicyInterfaceService,
     ) { }
 
     @Transactional({
@@ -52,7 +52,7 @@ export class OrderBilledService {
             return;
         }
 
-        await this.shippingPolicyService.handleSetPolicy(order.order_uuid, { is_billed: true, is_placed: orderData.is_placed, data: order });
+        await this.policyService.handleSetPolicy(order.order_uuid, { is_billed: true, is_placed: orderData.is_placed, data: order });
 
         return;
     }

@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { ShippingPolicyService } from "src/module/shipment-module/infrastructure/policy/shipping/shipping.policy.service";
+import { Inject, Injectable } from "@nestjs/common";
+import type { PolicyInterfaceService } from "src/common/infrastruture/policy/policy.interface";
 import type { OrderPlacedMQEventPayload } from "src/module/shipment-module/infrastructure/rabbit-mq/rabbit-mq.type";
 import { OrderRepository } from "src/module/shipment-module/infrastructure/repository/order.repository";
 import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
@@ -8,7 +8,7 @@ import { runOnTransactionCommit, Transactional } from "typeorm-transactional";
 export class OrderPlacedService {
     constructor(
         private readonly orderRepository: OrderRepository,
-        private readonly shippingPolicyService: ShippingPolicyService,
+        @Inject('POLICY_TOKEN') private readonly policyService: PolicyInterfaceService,
     ) { }
 
     @Transactional({
@@ -23,7 +23,7 @@ export class OrderPlacedService {
 
         await this.orderRepository.updateOrder(order.order_uuid, { is_placed: true });
 
-        await this.shippingPolicyService.handleSetPolicy(order.order_uuid, { is_placed: true, is_billed: orderData.is_billed, data: { customer_uuid: order.customer_uuid, order_uuid: order.order_uuid } });
+        await this.policyService.handleSetPolicy(order.order_uuid, { is_placed: true, is_billed: orderData.is_billed, data: { customer_uuid: order.customer_uuid, order_uuid: order.order_uuid } });
         return;
     }
 }

@@ -17,7 +17,6 @@ import { ShippingPolicyService } from '../policy/shipping/shipping.policy.servic
         RabbitMQService,
         ShipmentRabbitMQConsumerInitializer,
         EventHandlerMapService,
-        ShippingPolicyService,
         UserRegisteredService,
         OrderPlacedService,
         OrderBilledService,
@@ -26,6 +25,7 @@ import { ShippingPolicyService } from '../policy/shipping/shipping.policy.servic
         UserRepository,
         OrderRepository,
         ProductRepository,
+        { provide: 'POLICY_TOKEN', useClass: ShippingPolicyService },
     ],
     exports: [RabbitMQService, EventHandlerMapService],
 })
